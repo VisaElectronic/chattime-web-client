@@ -9,7 +9,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="md:ml-85">
+      <div className="h-full md:ml-85">
         {/* <Header /> */}
         <div className="h-full flex justify-center items-center dark:text-white">
           Select a chat to start messsaging
