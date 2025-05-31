@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { HiUserCircle, HiOutlineCog, HiChatAlt2 } from "react-icons/hi";
 import SideBarChat from "./chat";
+import SearchBar from "./search";
 
 const tabs = [
   {
@@ -47,15 +48,13 @@ export default function Sidebar() {
 
   return (
     <div className="h-full">
-      {/* 1) Content on top */}
+      <SearchBar />
       <div className="text-white">
         <ul className="space-y-2 font-medium">
           {content}
         </ul>
       </div>
-
-      {/* 2) Buttons below */}
-      <div className="bottom-0 fixed w-full py-3 bg-white dark:bg-gray-800 border-t-[0.01px] dark:border-t-[#656565]">
+      <div className="w-full lg:w-85 bottom-0 fixed py-3 bg-white dark:bg-gray-800 border-t-[0.01px] dark:border-t-[#656565]">
         <div className="flex justify-around">
           {tabs.map((tab, idx) => {
             const Icon = tab.icon;
