@@ -6,8 +6,7 @@
  * - Configure via environment variables (NEXT_PUBLIC_API_DOMAIN, NEXT_PUBLIC_API_PATH)
  * - Fallback to development defaults
  */
-export const API_DOMAIN =
-    process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:8080";
+export const API_DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:8080";
 
 export const API_PATH = process.env.NEXT_PUBLIC_API_PATH || "";
 

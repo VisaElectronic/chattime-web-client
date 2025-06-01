@@ -6,6 +6,7 @@ import { FiChevronRight } from 'react-icons/fi';
 import SideBarChat from "./chat";
 import SearchBar from "./search";
 import Profile from "./profile";
+import { useGroupChannelStore } from "@/stores/group-channel";
 
 const tabs = [
   {
@@ -30,10 +31,11 @@ type Sidebar = {
 
 export default function Sidebar() {
   const [active, setActive] = useState<number>(1);
+  const groupChannels = useGroupChannelStore((state) => state.items);
 
   const getListOfChats = () => {
     const items: React.JSX.Element[] = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < groupChannels.length; i++) {
       items.push(<SideBarChat key={i} title={'Title'} />);
     }
     return items;
@@ -44,13 +46,13 @@ export default function Sidebar() {
     for (let i = 0; i < 1; i++) {
     }
     items.push(
-      <div className="flex justify-between items-center">
-        <Profile key={0} title="John Does" phone="+855 098765432" username="@testuser" />
+      <div key={0} className="flex justify-between items-center cursor-pointer">
+        <Profile title="John Does" phone="+855 098765432" username="@testuser" />
         <FiChevronRight className="text-white" size={20} />
       </div>
     )
     items.push(
-      <div key={1} className="flex items-center justify-between my-5 dark:text-white">
+      <div key={1} className="flex items-center justify-between my-5 dark:text-white cursor-pointer">
         <div className="flex items-center gap-3">
           <div className="bg-red-700 rounded-sm">
             <HiUserCircle className="text-white" size={20} />

@@ -1,6 +1,7 @@
 "use client";
 
 import Loading from "@/components/commons/loading";
+import { CHAT_ROUTE } from "@/constants/routes";
 import LoginResponse from "@/dto/auth/login.response";
 import { AuthService } from "@/services/auth.service";
 import { Button, Label, TextInput, Checkbox } from "flowbite-react";
@@ -22,8 +23,8 @@ export default function LoginPage() {
 
     try {
       const response: LoginResponse = await AuthService.login({ email, password });
-      console.log(response.data.accessToken);
-      router.push("/"); // or wherever you want to go
+      AuthService.storeAuthToken(response.data.accessToken);
+      router.push(CHAT_ROUTE); // or wherever you want to go
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)

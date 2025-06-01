@@ -1,6 +1,9 @@
-import Sidebar from "@/app/components/sidebar";
+'use client'
 
-export default function Home() {
+import Sidebar from "@/app/components/sidebar";
+import { CheckAuth } from "@/lib/check-auth";
+
+function Home() {
   return (
     <div className="h-full">
       <aside id="logo-sidebar" className="fixed top-0 left-0 z-40 w-full lg:w-85 h-screen transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
@@ -18,3 +21,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default CheckAuth(Home);

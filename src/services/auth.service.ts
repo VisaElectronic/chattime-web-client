@@ -16,4 +16,8 @@ export class AuthService {
     static logout(): Promise<void> {
         return Http.post<void>("/api/auth/logout", null);
     }
+
+    static storeAuthToken(access_token: string) {
+        localStorage.setItem('access_token', access_token);
+    }
 }
