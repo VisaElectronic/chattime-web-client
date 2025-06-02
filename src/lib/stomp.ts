@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import User from '@/models/User';
 import GroupChannel from '@/models/GroupChannel';
 import { useGroupChannelStore } from '@/stores/group-channel';
+import { LOGIN_ROUTE } from '@/constants/routes';
 
 let stompClient: Client | null = null
 
@@ -37,6 +38,7 @@ export function connectStomp(access_token: string) {
         stompClient?.subscribe(WS_ENDPOINTS.AUTH.SUB + ws_id, (message: IMessage) => {
             const body: WSResponse<User> = message.body ? JSON.parse(message.body) : null;
             console.log('Received message:', body)
+            if(body.data as unknown === 'token_expired') window.location.href = LOGIN_ROUTE;
             connectToOnline(body);
         })
         sendMessage(
