@@ -36,7 +36,7 @@ export default function Sidebar() {
   const getListOfChats = () => {
     const items: React.JSX.Element[] = [];
     for (let i = 0; i < groupChannels.length; i++) {
-      items.push(<SideBarChat key={i} title={'Title'} />);
+      items.push(<SideBarChat key={i} groupChannel={groupChannels[i]} />);
     }
     return items;
   }

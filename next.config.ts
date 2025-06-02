@@ -4,7 +4,7 @@ import withFlowbiteReact from "flowbite-react/plugin/nextjs";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['flowbite.com'],
+    domains: ['flowbite.com', 'localhost'],
   },
 };
 
