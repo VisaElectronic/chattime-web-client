@@ -82,7 +82,7 @@ export default function Sidebar() {
           {content}
         </ul>
       </div>
-      <div className="w-full lg:w-85 bottom-0 fixed py-3 bg-white dark:bg-gray-800 border-t-[0.01px] dark:border-t-[#656565]">
+      <div className="w-full lg:w-85 bottom-0 fixed py-3 dark:bg-gray-800 border-t-[0.01px] dark:border-t-[#656565] border-r-[0.01px] dark:border-r-[#656565]">
         <div className="flex justify-around">
           {tabs.map((tab, idx) => {
             const Icon = tab.icon;

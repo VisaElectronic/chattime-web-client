@@ -80,7 +80,6 @@ export function connectToOnline(res: WSResponse<User>) {
         const body: WSResponse<GroupChannel[]> = message.body ? JSON.parse(message.body) : null;
         console.log('Received message:', body)
         useGroupChannelStore.getState().addItems(body.data);
-        // …handle incoming message…
     })
     sendMessage(
         WS_ENDPOINTS.ONLINE.PUB(res.data.key),
