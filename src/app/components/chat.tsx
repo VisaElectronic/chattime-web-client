@@ -3,10 +3,15 @@ import Channel from "@/models/Channel";
 import GroupChannel from "@/models/GroupChannel";
 import Image from "next/image";
 
-export default function SideBarChat({groupChannel}: {groupChannel: GroupChannel}) {
+type SideBarChatProps = {
+    groupChannel: GroupChannel;
+    onClickChannel: () => void;
+}
+
+export default function SideBarChat({groupChannel, onClickChannel}: SideBarChatProps) {
     const channel: Channel = groupChannel.channel;
     return (
-        <li>
+        <li onClick={() => onClickChannel()}>
             <div className="flex items-center p-3">
                 <div className="shrink-0">
                     <Image 

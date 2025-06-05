@@ -7,6 +7,7 @@ import SideBarChat from "./chat";
 import SearchBar from "./search";
 import Profile from "./profile";
 import { useGroupChannelStore } from "@/stores/group-channel";
+import { CHAT_WINDOW, PROFILE_DETAIL } from "@/constants/window";
 
 const tabs = [
   {
@@ -24,19 +25,17 @@ const tabs = [
 ];
 
 type Sidebar = {
-  contact: React.ReactNode;
-  chat: React.ReactNode;
-  setting: React.ReactNode;
+  onChangeTab: (type: number) => void;
 };
 
-export default function Sidebar() {
+export default function Sidebar({onChangeTab}: Sidebar) {
   const [active, setActive] = useState<number>(1);
   const groupChannels = useGroupChannelStore((state) => state.items);
 
   const getListOfChats = () => {
     const items: React.JSX.Element[] = [];
     for (let i = 0; i < groupChannels.length; i++) {
-      items.push(<SideBarChat key={i} groupChannel={groupChannels[i]} />);
+      items.push(<SideBarChat key={i} groupChannel={groupChannels[i]} onClickChannel={() => onChangeTab(CHAT_WINDOW)} />);
     }
     return items;
   }
@@ -46,7 +45,7 @@ export default function Sidebar() {
     for (let i = 0; i < 1; i++) {
     }
     items.push(
-      <div key={0} className="flex justify-between items-center cursor-pointer">
+      <div key={0} className="flex justify-between items-center cursor-pointer" onClick={() => onChangeTab(PROFILE_DETAIL)}>
         <Profile title="John Does" phone="+855 098765432" username="@testuser" />
         <FiChevronRight className="text-white" size={20} />
       </div>
