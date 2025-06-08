@@ -14,10 +14,18 @@ export class AuthService {
 
     /** POST /api/auth/logout */
     static logout(): Promise<void> {
-        return Http.post<void>("/api/auth/logout", null);
+        return Http.post<void>(ENDPOINTS.auth.logout, null);
     }
 
     static storeAuthToken(access_token: string) {
         localStorage.setItem('access_token', access_token);
+    }
+
+    static removeAuthToken() {
+        localStorage.removeItem('access_token');
+    }
+
+    static getAuthToken() {
+        return localStorage.getItem('access_token');
     }
 }

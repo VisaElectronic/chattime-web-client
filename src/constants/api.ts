@@ -23,5 +23,8 @@ export const ENDPOINTS = {
         login: `${API_BASE_URL}/login`,
         logout: `${API_BASE_URL}/logout`,
     },
+    user: {
+        profile: `${API_BASE_URL}/api/user/profile`,
+    },
     users: `${API_BASE_URL}/users`,
 };

@@ -8,6 +8,7 @@ import SearchBar from "./search";
 import Profile from "./profile";
 import { useGroupChannelStore } from "@/stores/group-channel";
 import { CHAT_WINDOW, PROFILE_DETAIL } from "@/constants/window";
+import SettingRow from "./setting/setting-row";
 
 const tabs = [
   {
@@ -51,15 +52,7 @@ export default function Sidebar({onChangeTab}: Sidebar) {
       </div>
     )
     items.push(
-      <div key={1} className="flex items-center justify-between my-5 dark:text-white cursor-pointer">
-        <div className="flex items-center gap-3">
-          <div className="bg-red-700 rounded-sm">
-            <HiUserCircle className="text-white" size={20} />
-          </div>
-          <p>My Profile</p>
-        </div>
-        <FiChevronRight className="text-white" size={20} />
-      </div>
+      <SettingRow key={1} onClick={() => onChangeTab(PROFILE_DETAIL)}/>
     )
     return items;
   }

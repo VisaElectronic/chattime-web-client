@@ -1,64 +1,92 @@
+import { AuthService } from "@/services/auth.service";
+
 export class Http {
+    /**
+     * Retrieve the authorization header if an accessToken exists in localStorage
+     */
+    private static getAuthHeader(): Record<string, string> {
+        if (typeof window === 'undefined') return {};
+        const token = AuthService.getAuthToken();
+        return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+
+    /**
+     * Core request method that injects the auth header
+     */
     private static async request<T>(
         url: string,
-        options: RequestInit
+        options: RequestInit = {}
     ): Promise<T> {
-        const res = await fetch(url, options);
-        let payload = null;
+        // Extract existing headers (if any)
+        const existingHeaders: Record<string, string> =
+            options.headers instanceof Headers
+                ? Object.fromEntries(options.headers.entries())
+                : (options.headers as Record<string, string>) || {};
 
+        // Merge headers: existing + auth
+        const headers = {
+            ...existingHeaders,
+            ...this.getAuthHeader(),
+        };
+
+        // Perform fetch
+        const res = await fetch(url, {
+            ...options,
+            headers,
+        });
+
+        // Try to parse JSON body
+        let payload = null;
         try {
             payload = await res.json();
         } catch {
-            // no JSON body
+            // No JSON
         }
 
         if (!res.ok) {
             const message =
-                payload?.message || payload?.error || res.statusText || "Request failed";
+                payload?.message || payload?.error || res.statusText || 'Request failed';
             throw new Error(message);
         }
 
-        return payload as T;
+        return payload;
     }
 
     /**
      * GET request
-     * @param url     endpoint URL (can include basePath)
-     * @param params  query params object
-     * @param headers additional headers
      */
     static get<T>(
         url: string,
         params?: Record<string, string | number>,
-        headers?: Record<string, string>
+        headers: Record<string, string> = {}
     ): Promise<T> {
         const qs = params
-            ? "?" + new URLSearchParams(
+            ? `?${new URLSearchParams(
                 Object.entries(params).map(([k, v]) => [k, String(v)])
-            ).toString()
-            : "";
+            ).toString()}`
+            : '';
         return this.request<T>(url + qs, {
-            method: "GET",
-            headers,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                ...headers
+            },
         });
     }
 
     /**
      * POST request
-     * @param url     endpoint URL
-     * @param body    JSON-serializable payload
-     * @param headers additional headers
      */
     static post<T>(
         url: string,
         body: unknown,
-        headers?: Record<string, string>
+        headers: Record<string, string> = {}
     ): Promise<T> {
         return this.request<T>(url, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                ...(headers || {}),
+                'Content-Type': 'application/json',
+                ...headers,
             },
             body: JSON.stringify(body),
         });

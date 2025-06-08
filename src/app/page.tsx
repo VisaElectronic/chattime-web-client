@@ -10,6 +10,7 @@ import ProfileSettings from "./components/setting/profile-detail";
 function Home() {
   const [typeWindow, setTypeWindow] = useState(EMPTY_WINDOW);
   const [windowContent, setWindowContent] = useState(<></>);
+
   useEffect(() => {
     if(typeWindow === EMPTY_WINDOW) {
       setWindowContent(<>Select a chat to start messsaging</>);
