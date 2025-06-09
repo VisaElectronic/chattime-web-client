@@ -9,7 +9,9 @@ export interface LoginPayload { email: string; password: string }
 export class AuthService {
     /** POST /api/auth/login */
     static login(data: LoginPayload): Promise<LoginResponse> {
-        return Http.post<LoginResponse>(ENDPOINTS.auth.login, data);
+        return Http.post<LoginResponse>(ENDPOINTS.auth.login, data, {
+            'Content-Type': 'application/json',
+        });
     }
 
     /** POST /api/auth/logout */

@@ -25,8 +25,8 @@ export class Http {
 
         // Merge headers: existing + auth
         const headers = {
-            ...existingHeaders,
             ...this.getAuthHeader(),
+            ...existingHeaders,
         };
 
         // Perform fetch

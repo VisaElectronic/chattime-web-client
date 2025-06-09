@@ -13,12 +13,18 @@ export default function ProfileSettings() {
   const [, setError] = useState<string | null>(null);
   const [, setLoading] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
+  const [firstname, setFirstname] = useState<string>('');
+  const [lastname, setLastname] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
 
   useEffect(() => {
     async function fetchData() {
       try {
         const user = await UserService.fetchProfile();
         setProfile(user);
+        setFirstname(user.firstname);
+        setLastname(user.lastname);
+        setBio(user.bio);
         setUser(user)
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -63,6 +69,8 @@ export default function ProfileSettings() {
           <div className="flex flex-col flex-auto">
             <input
               id="firstname"
+              value={firstname}
+              onChange={e => setFirstname(e.target.value)}
               type="text"
               placeholder="test"
               className="flex-1 text-white placeholder-gray-400 focus:outline-none pb-3"
@@ -70,6 +78,8 @@ export default function ProfileSettings() {
             <hr className="border-solid text-[#666e7a]" />
             <input
               id="lastname"
+              value={lastname}
+              onChange={e => setLastname(e.target.value)}
               type="text"
               placeholder="test"
               className="flex-1 text-white placeholder-gray-400 focus:outline-none pt-3"
@@ -84,7 +94,10 @@ export default function ProfileSettings() {
         <div>
           <label className="block text-gray-200 text-xs mb-1">BIO</label>
           <input
+            id="bio"
             type="text"
+            value={bio}
+            onChange={e => setBio(e.target.value)}
             placeholder="A few words about you"
             className="w-full bg-gray-800 text-white placeholder-gray-400 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
@@ -104,9 +117,9 @@ export default function ProfileSettings() {
         {/* Settings List */}
         <div className="divide-y divide-gray-700 bg-gray-800 px-4 rounded-lg">
           <ProfileField label="Username" value={profile?.username ? '@' + profile?.username : ''} />
-          <ProfileField label="Change Number" value="+1 234 567 890" />
-          <ProfileField label="Your Name Color" customElement={<div className="w-6 h-6 rounded-full bg-pink-500" />} />
-          <ProfileField label="Personal Channel" actionText="Add" />
+          <ProfileField label="Change Number" value={profile?.phone} />
+          {/* <ProfileField label="Your Name Color" customElement={<div className="w-6 h-6 rounded-full bg-pink-500" />} />
+          <ProfileField label="Personal Channel" actionText="Add" /> */}
         </div>
 
         {/* Footer Actions */}

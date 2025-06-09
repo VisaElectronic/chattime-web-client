@@ -9,6 +9,7 @@ import Profile from "./profile";
 import { useGroupChannelStore } from "@/stores/group-channel";
 import { CHAT_WINDOW, PROFILE_DETAIL } from "@/constants/window";
 import SettingRow from "./setting/setting-row";
+import { useUserStore } from "@/stores/profile";
 
 const tabs = [
   {
@@ -32,6 +33,7 @@ type Sidebar = {
 export default function Sidebar({onChangeTab}: Sidebar) {
   const [active, setActive] = useState<number>(1);
   const groupChannels = useGroupChannelStore((state) => state.items);
+  const profile = useUserStore((state) => state.item);
 
   const getListOfChats = () => {
     const items: React.JSX.Element[] = [];
@@ -47,7 +49,11 @@ export default function Sidebar({onChangeTab}: Sidebar) {
     }
     items.push(
       <div key={0} className="flex justify-between items-center cursor-pointer" onClick={() => onChangeTab(PROFILE_DETAIL)}>
-        <Profile title="John Does" phone="+855 098765432" username="@testuser" />
+        <Profile 
+          title={profile ? profile.firstname + ' ' + profile.lastname : ''} 
+          phone={profile?.phone ?? ''}
+          username={profile?.username ?? ''}
+        />
         <FiChevronRight className="text-white" size={20} />
       </div>
     )
