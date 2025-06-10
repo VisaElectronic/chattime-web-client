@@ -82,7 +82,7 @@ export default function LoginPage() {
         {/* — Right side: login form — */}
         <div className="flex items-center justify-center p-12">
           <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-white">Welcome To Chattime</h2>
+            <h2 className="text-2xl font-bold mb-6 text-white">Create your Free Account</h2>
 
             {/* <div className="flex space-x-4 mb-6">
               <Button outline pill className="flex-1 text-xs">
@@ -102,34 +102,76 @@ export default function LoginPage() {
             </div> */}
 
             <form className="space-y-4">
-              <div>
-                <Label htmlFor="email" className="text-gray-200" />
+              <div className="flex justify-between">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="firstname" className="text-gray-200">First Name</Label>
+                  <TextInput 
+                    id="firstname"
+                    type="text" 
+                    placeholder="Enter your email" 
+                    onChange={(e) => setEmail(e.currentTarget.value)} required 
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="lastname" className="text-gray-200">Last Name</Label>
+                  <TextInput 
+                    id="lastname"
+                    type="text" 
+                    placeholder="Enter your email" 
+                    onChange={(e) => setEmail(e.currentTarget.value)} required 
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="email" className="text-gray-200">Your Email</Label>
                 <TextInput 
                   id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  onChange={(e) => setEmail(e.currentTarget.value)} required />
+                  type="email" 
+                  placeholder="Enter your email" 
+                  onChange={(e) => setEmail(e.currentTarget.value)} required 
+                />
               </div>
-
-              <div>
-                <Label htmlFor="password" className="text-gray-200" />
-                <TextInput id="password" type="password" placeholder="••••••••" onChange={(e) => setPassword(e.currentTarget.value)} required />
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="phone" className="text-gray-200" >Your Phone</Label>
+                <TextInput 
+                  id="phone"
+                  type="text" 
+                  placeholder="Enter your phone" 
+                  onChange={(e) => setEmail(e.currentTarget.value)} required 
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="password" className="text-gray-200" >Password</Label>
+                <TextInput
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  onChange={(e) => setPassword(e.currentTarget.value)} required 
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="confirm-password" className="text-gray-200">Confirm Password</Label>
+                <TextInput
+                  id="confirm-password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  onChange={(e) => setPassword(e.currentTarget.value)} required 
+                />
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-5">
-                  <Checkbox id="remember" />
-                  <Label htmlFor="remember" className="text-gray-200">Remember me</Label>
+                  <Checkbox id="agree" className="w-6" />
+                  <Label htmlFor="agree" className="text-gray-200">By signing up, you are creating a account, and you agree to Terms of Use and Privacy Policy.</Label>
                 </div>
-                <a href="#" className="text-blue-500 hover:underline text-sm">Forgot password?</a>
               </div>
 
-              <Button fullSized onClick={handleSubmit}>Sign in to your account</Button>
+              <Button fullSized onClick={handleSubmit}>Create an account</Button>
             </form>
 
             <p className="text-center text-gray-400 text-sm mt-6">
-              Don’t have an account yet?{" "}
-              <a href="/register" className="text-blue-500 hover:underline">Sign up here</a>
+              Already have an account?{" "}
+              <a href="/login" className="text-blue-500 hover:underline">Sign in here</a>
             </p>
           </div>
         </div>
