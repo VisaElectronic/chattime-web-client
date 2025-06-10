@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/profile";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Datepicker } from "flowbite-react";
 
 export default function ProfileSettings() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function ProfileSettings() {
   const [firstname, setFirstname] = useState<string>('');
   const [lastname, setLastname] = useState<string>('');
   const [bio, setBio] = useState<string>('');
+  const [dob, setDob] = useState<Date>();
 
   useEffect(() => {
     async function fetchData() {
@@ -110,7 +112,12 @@ export default function ProfileSettings() {
         {/* Date of Birth */}
         <div className="flex items-center justify-between bg-gray-800 px-4 py-2 rounded-lg">
           <span className="text-gray-200 font-medium">Date of Birth</span>
-          <button className="text-indigo-400 font-medium hover:underline">Add</button>
+          <Datepicker 
+            defaultValue={dob}
+            value={dob} 
+            onChange={(date: Date | null) => date ? setDob(date) : null}
+            placeholder="Pick Your Date Of Birth"
+          />
         </div>
         <p className="text-gray-400 text-sm">Only your contacts will see your birthday.</p>
 
@@ -124,9 +131,9 @@ export default function ProfileSettings() {
 
         {/* Footer Actions */}
         <div className="flex flex-col divide-y divide-gray-700 bg-gray-800 px-4 rounded-lg">
-          <button className="text-indigo-400 font-medium hover:underline text-left py-2 cursor-pointer">
+          {/* <button className="text-indigo-400 font-medium hover:underline text-left py-2 cursor-pointer">
             Add Account
-          </button>
+          </button> */}
           <button className="text-red-500 font-medium hover:underline text-left py-2 cursor-pointer" onClick={handleLogout}>
             Log Out
           </button>

@@ -27,7 +27,7 @@ export default function Profile({title, phone, username}: ProfileProp) {
                         {phone}
                     </p>
                     <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                        {username}
+                        @{username}
                     </p>
                 </div>
             </div>
