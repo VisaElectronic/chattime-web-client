@@ -26,7 +26,7 @@ export default function ProfileSettings() {
         setProfile(user);
         setFirstname(user.firstname);
         setLastname(user.lastname);
-        setBio(user.bio);
+        setBio(user.bio ?? '');
         setUser(user)
       } catch (err: unknown) {
         if (err instanceof Error) {

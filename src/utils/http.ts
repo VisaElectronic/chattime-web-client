@@ -91,4 +91,40 @@ export class Http {
             body: JSON.stringify(body),
         });
     }
+
+    /**
+     * POST form-urlencoded data
+     */
+    static postForm<T>(
+        url: string,
+        body: Record<string, string | number | File | Blob | (string | number | File | Blob)[]>,
+        headers: Record<string, string> = {}
+    ): Promise<T> {
+        const formData = new FormData();
+
+        Object.entries(body).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                // append each array item under the same field name
+                value.forEach(item => {
+                    if (item instanceof File || item instanceof Blob) {
+                        formData.append(key, item);
+                    } else {
+                        formData.append(key, String(item));
+                    }
+                });
+            } else if (value instanceof File || value instanceof Blob) {
+                formData.append(key, value);
+            } else {
+                formData.append(key, String(value));
+            }
+        });
+
+        return this.request<T>(url, {
+            method: "POST",
+            headers: {
+                ...headers,
+            },
+            body: formData,
+        });
+    }
 }

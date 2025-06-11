@@ -1,8 +1,7 @@
 "use client";
 
 import Loading from "@/components/commons/loading";
-import { CHAT_ROUTE } from "@/constants/routes";
-import LoginResponse from "@/dto/auth/login.response";
+import { LOGIN_ROUTE } from "@/constants/routes";
 import { AuthService } from "@/services/auth.service";
 import { Button, Label, TextInput, Checkbox } from "flowbite-react";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,9 @@ import { useState } from "react";
 export default function LoginPage() {
   const router = useRouter();
 
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [, setError] = useState<string | null>(null);
@@ -22,9 +24,14 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response: LoginResponse = await AuthService.login({ email, password });
-      AuthService.storeAuthToken(response.data.accessToken);
-      router.push(CHAT_ROUTE); // or wherever you want to go
+      await AuthService.register({
+        firstname,
+        lastname,
+        phone,
+        email,
+        password
+      });
+      router.push(LOGIN_ROUTE); // or wherever you want to go
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
@@ -108,8 +115,9 @@ export default function LoginPage() {
                   <TextInput 
                     id="firstname"
                     type="text" 
-                    placeholder="Enter your email" 
-                    onChange={(e) => setEmail(e.currentTarget.value)} required 
+                    placeholder="Enter your email"
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.currentTarget.value)} required 
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -117,8 +125,9 @@ export default function LoginPage() {
                   <TextInput 
                     id="lastname"
                     type="text" 
-                    placeholder="Enter your email" 
-                    onChange={(e) => setEmail(e.currentTarget.value)} required 
+                    placeholder="Enter your email"
+                    value={lastname}
+                    onChange={(e) => setLastname(e.currentTarget.value)} required 
                   />
                 </div>
               </div>
@@ -128,6 +137,7 @@ export default function LoginPage() {
                   id="email"
                   type="email" 
                   placeholder="Enter your email" 
+                  value={email}
                   onChange={(e) => setEmail(e.currentTarget.value)} required 
                 />
               </div>
@@ -137,7 +147,8 @@ export default function LoginPage() {
                   id="phone"
                   type="text" 
                   placeholder="Enter your phone" 
-                  onChange={(e) => setEmail(e.currentTarget.value)} required 
+                  value={phone}
+                  onChange={(e) => setPhone(e.currentTarget.value)} required 
                 />
               </div>
               <div className="flex flex-col gap-2">
