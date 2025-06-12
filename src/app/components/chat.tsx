@@ -1,4 +1,5 @@
 import { API_DOMAIN } from "@/constants/api";
+import { connectToChat } from "@/lib/stomp";
 import Channel from "@/models/Channel";
 import GroupChannel from "@/models/GroupChannel";
 import Image from "next/image";
@@ -10,8 +11,14 @@ type SideBarChatProps = {
 
 export default function SideBarChat({groupChannel, onClickChannel}: SideBarChatProps) {
     const channel: Channel = groupChannel.channel;
+
+    const clickOnChannel = () => {
+        onClickChannel();
+        connectToChat(groupChannel);
+    };
+
     return (
-        <li onClick={() => onClickChannel()}>
+        <li onClick={clickOnChannel}>
             <div className="flex items-center p-3">
                 <div className="shrink-0">
                     <Image 

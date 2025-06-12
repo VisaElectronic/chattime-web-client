@@ -89,3 +89,16 @@ export function connectToOnline(res: WSResponse<User>) {
         }
     )
 }
+
+export function connectToChat(groupChannel: GroupChannel) {
+    stompClient?.subscribe(WS_ENDPOINTS.CHAT.SUB(groupChannel.key), (message: IMessage) => {
+        const body = message.body ? JSON.parse(message.body) : null;
+        console.log('Received message:', body)
+    })
+    sendMessage(
+        WS_ENDPOINTS.CHAT.PUB(groupChannel.key),
+        {
+            isGroup: groupChannel.channel ? false : true
+        }
+    )
+}
