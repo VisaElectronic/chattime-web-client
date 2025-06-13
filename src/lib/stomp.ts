@@ -6,6 +6,7 @@ import User from '@/models/User';
 import GroupChannel from '@/models/GroupChannel';
 import { useGroupChannelStore } from '@/stores/group-channel';
 import { LOGIN_ROUTE } from '@/constants/routes';
+import { useChatStore } from '@/stores/chat';
 
 let stompClient: Client | null = null
 
@@ -94,6 +95,7 @@ export function connectToChat(groupChannel: GroupChannel) {
     stompClient?.subscribe(WS_ENDPOINTS.CHAT.SUB(groupChannel.key), (message: IMessage) => {
         const body = message.body ? JSON.parse(message.body) : null;
         console.log('Received message:', body)
+        useChatStore.getState().addItems(body.data);
     })
     sendMessage(
         WS_ENDPOINTS.CHAT.PUB(groupChannel.key),
