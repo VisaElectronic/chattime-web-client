@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { HiUserCircle, HiOutlineCog, HiChatAlt2 } from "react-icons/hi";
 import { FiChevronRight } from 'react-icons/fi';
-import SideBarChat from "./chat";
+import SideBarChat from "./sidebar-chat";
 import SearchBar from "./search";
 import Profile from "./profile";
 import { useGroupChannelStore } from "@/stores/group-channel";

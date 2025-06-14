@@ -2,7 +2,11 @@
 import React, { useState } from "react";
 import { FiPlus, FiSmile, FiSend, FiMic } from "react-icons/fi";
 
-export default function ChatInput({ onSend }) {
+interface ChatInputProp {
+    onSend: (text: string) => void
+}
+
+export default function ChatInput({ onSend }: ChatInputProp) {
     const [text, setText] = useState("");
 
     const handleSend = () => {
@@ -12,7 +16,7 @@ export default function ChatInput({ onSend }) {
         setText("");
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handleSend();
@@ -20,7 +24,7 @@ export default function ChatInput({ onSend }) {
     };
 
     return (
-        <div className="px-4 py-3 border-y-[0.01px] dark:border-y-[#656565] sticky bottom-0 w-full dark:bg-gray-800">
+        <div className="basis-1/4 px-4 py-3 border-y-[0.01px] dark:border-y-[#656565] w-full dark:bg-gray-800">
             <div className="flex items-center space-x-2">
                 {/* + button */}
                 <button className="px-2 text-discordMuted hover:text-discordText">

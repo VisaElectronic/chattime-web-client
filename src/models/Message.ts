@@ -1,9 +1,10 @@
 import GroupChannel from "./GroupChannel";
 import User from "./User";
 
-export default class Chat {
+export default class Message {
     id: number;
     content: string;
+    ofCurrentUser: boolean;
     group: GroupChannel;
     user: User;
     createdAt: string;
@@ -11,6 +12,7 @@ export default class Chat {
     constructor(
         id: number,
         content: string,
+        ofCurrentUser: boolean,
         group: GroupChannel,
         user: User,
         createdAt: string,
@@ -20,5 +22,6 @@ export default class Chat {
         this.group = group
         this.user = user
         this.createdAt = createdAt
+        this.ofCurrentUser = ofCurrentUser;
     }
 }

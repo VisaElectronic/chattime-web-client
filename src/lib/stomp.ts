@@ -6,7 +6,7 @@ import User from '@/models/User';
 import GroupChannel from '@/models/GroupChannel';
 import { useGroupChannelStore } from '@/stores/group-channel';
 import { LOGIN_ROUTE } from '@/constants/routes';
-import { useChatStore } from '@/stores/chat';
+import { useMessageStore } from '@/stores/message-store';
 
 let stompClient: Client | null = null
 
@@ -42,7 +42,7 @@ export function connectStomp(access_token: string) {
             if(body.data as unknown === 'token_expired') window.location.href = LOGIN_ROUTE;
             connectToOnline(body);
         })
-        sendMessage(
+        sendWSMessage(
             WS_ENDPOINTS.AUTH.PUB + ws_id,
             {
                 authToken: access_token
@@ -65,7 +65,7 @@ export function disconnectStomp() {
     }
 }
 
-export function sendMessage(destination: string, payload: unknown) {
+export function sendWSMessage(destination: string, payload: unknown) {
     if (stompClient && stompClient.active) {
         stompClient.publish({
             destination,
@@ -82,7 +82,7 @@ export function connectToOnline(res: WSResponse<User>) {
         console.log('Received message:', body)
         useGroupChannelStore.getState().addItems(body.data);
     })
-    sendMessage(
+    sendWSMessage(
         WS_ENDPOINTS.ONLINE.PUB(res.data.key),
         {
             userId: res.data.id,
@@ -91,16 +91,39 @@ export function connectToOnline(res: WSResponse<User>) {
     )
 }
 
+export function connectToChatChannel(groupChannel: GroupChannel) {
+    stompClient?.subscribe(WS_ENDPOINTS.CONNECT_CHAT.SUB(groupChannel.key), (message: IMessage) => {
+        const body = message.body ? JSON.parse(message.body) : null;
+        console.log('Received message:', body)
+        useMessageStore.getState().addItems(body.data);
+        connectToChat(groupChannel);
+    })
+    sendWSMessage(
+        WS_ENDPOINTS.CONNECT_CHAT.PUB(groupChannel.key),
+        {
+            isGroup: groupChannel.channel ? false : true
+        }
+    )
+}
+
 export function connectToChat(groupChannel: GroupChannel) {
     stompClient?.subscribe(WS_ENDPOINTS.CHAT.SUB(groupChannel.key), (message: IMessage) => {
         const body = message.body ? JSON.parse(message.body) : null;
         console.log('Received message:', body)
-        useChatStore.getState().addItems(body.data);
+        useMessageStore.getState().addItem(body.data);
     })
-    sendMessage(
+}
+
+export function sendChatMessage(text: string, groupChannel?: GroupChannel) {
+    if(!groupChannel) {
+        console.error('No Channel');
+        return;
+    }
+    sendWSMessage(
         WS_ENDPOINTS.CHAT.PUB(groupChannel.key),
         {
-            isGroup: groupChannel.channel ? false : true
+            content: text,
+            type: 'TEXT',
         }
     )
 }

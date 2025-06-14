@@ -6,11 +6,13 @@ import { create } from 'zustand'
  * 2) Define the Zustand state plus actions.
  */
 type ChannelState = {
-    items: GroupChannel[]                // the list of objects
+    items: GroupChannel[]
+    selectedGroupChannel?: GroupChannel
     addItem: (item: GroupChannel) => void
     addItems: (items: GroupChannel[]) => void
     removeItem: (id: number) => void
-    clearAll: () => void         // optional: remove all items
+    clearAll: () => void
+    selectGroupChannel: (item: GroupChannel) => void
 }
 
 /**
@@ -18,7 +20,6 @@ type ChannelState = {
  */
 export const useGroupChannelStore = create<ChannelState>((set) => ({
     items: [],
-
     addItem: (item: GroupChannel) =>
         set((state) => ({
             items: [...state.items, item],
@@ -35,4 +36,7 @@ export const useGroupChannelStore = create<ChannelState>((set) => ({
         })),
 
     clearAll: () => set({ items: [] }),
+    selectGroupChannel: (item: GroupChannel) => set(() => ({
+        selectedGroupChannel: item
+    }))
 }))

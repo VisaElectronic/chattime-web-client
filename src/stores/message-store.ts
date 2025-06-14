@@ -1,14 +1,14 @@
 // lib/store.ts
-import Chat from '@/models/Chat'
+import Message from '@/models/Message'
 import { create } from 'zustand'
 
 /**
  * 2) Define the Zustand state plus actions.
  */
-type ChatState = {
-    items: Chat[]                // the list of objects
-    addItem: (item: Chat) => void
-    addItems: (items: Chat[]) => void
+type MessageState = {
+    items: Message[]
+    addItem: (item: Message) => void
+    addItems: (items: Message[]) => void
     removeItem: (id: number) => void
     clearAll: () => void         // optional: remove all items
 }
@@ -16,15 +16,15 @@ type ChatState = {
 /**
  * 3) Create the store. 
  */
-export const useChatStore = create<ChatState>((set) => ({
+export const useMessageStore = create<MessageState>((set) => ({
     items: [],
-
-    addItem: (item: Chat) =>
+    
+    addItem: (item: Message) =>
         set((state) => ({
             items: [...state.items, item],
         })),
     
-    addItems: (items: Chat[]) =>
+    addItems: (items: Message[]) =>
         set(() => ({
             items: [...items],
         })),

@@ -9,8 +9,12 @@ export const WS_ENDPOINTS = {
         SUB: (user_key: string) => "/channel/" + user_key + "/online",
         PUB: (user_key: string) => "/app/channel/" + user_key + "/connect",
     },
-    CHAT: {
+    CONNECT_CHAT: {
         SUB: (channel_key: string) => "/channel/" + channel_key + "/chat/connect",
         PUB: (channel_key: string) => "/app/channel/" + channel_key + "/chat/connect",
+    },
+    CHAT: {
+        SUB: (channel_key: string) => "/channel/" + channel_key + "/chat",
+        PUB: (channel_key: string) => "/app/channel/" + channel_key + "/chat",
     }
 };
