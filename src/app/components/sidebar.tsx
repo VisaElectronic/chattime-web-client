@@ -7,9 +7,10 @@ import SideBarChat from "./sidebar-chat";
 import SearchBar from "./search";
 import Profile from "./profile";
 import { useGroupChannelStore } from "@/stores/group-channel";
-import { CHAT_WINDOW, PROFILE_DETAIL } from "@/constants/window";
 import SettingRow from "./setting/setting-row";
 import { useUserStore } from "@/stores/profile";
+import { useWindowContentStore } from "@/stores/window-content";
+import { PROFILE_DETAIL } from "@/constants/window";
 
 const tabs = [
   {
@@ -26,19 +27,16 @@ const tabs = [
   },
 ];
 
-type Sidebar = {
-  onChangeTab: (type: number) => void;
-};
-
-export default function Sidebar({onChangeTab}: Sidebar) {
+export default function Sidebar() {
   const [active, setActive] = useState<number>(1);
   const groupChannels = useGroupChannelStore((state) => state.items);
+  const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
   const profile = useUserStore((state) => state.item);
 
   const getListOfChats = () => {
     const items: React.JSX.Element[] = [];
     for (let i = 0; i < groupChannels.length; i++) {
-      items.push(<SideBarChat key={i} groupChannel={groupChannels[i]} onClickChannel={() => onChangeTab(CHAT_WINDOW)} />);
+      items.push(<SideBarChat key={i} groupChannel={groupChannels[i]} />);
     }
     return items;
   }
@@ -48,7 +46,11 @@ export default function Sidebar({onChangeTab}: Sidebar) {
     for (let i = 0; i < 1; i++) {
     }
     items.push(
-      <div key={0} className="flex justify-between items-center cursor-pointer" onClick={() => onChangeTab(PROFILE_DETAIL)}>
+      <div 
+        key={0} 
+        className="flex justify-between items-center cursor-pointer"
+        onClick={() => setTypeWindow(PROFILE_DETAIL)}
+      >
         <Profile 
           title={profile ? profile.firstname + ' ' + profile.lastname : ''} 
           phone={profile?.phone ?? ''}
@@ -58,7 +60,7 @@ export default function Sidebar({onChangeTab}: Sidebar) {
       </div>
     )
     items.push(
-      <SettingRow key={1} onClick={() => onChangeTab(PROFILE_DETAIL)}/>
+      <SettingRow key={1}/>
     )
     return items;
   }

@@ -1,21 +1,23 @@
 import { API_DOMAIN } from "@/constants/api";
+import { CHAT_WINDOW } from "@/constants/window";
 import { connectToChatChannel } from "@/lib/stomp";
 import Channel from "@/models/Channel";
 import GroupChannel from "@/models/GroupChannel";
 import { useGroupChannelStore } from "@/stores/group-channel";
+import { useWindowContentStore } from "@/stores/window-content";
 import Image from "next/image";
 
 type SideBarChatProps = {
     groupChannel: GroupChannel;
-    onClickChannel: () => void;
 }
 
-export default function SideBarChat({groupChannel, onClickChannel}: SideBarChatProps) {
+export default function SideBarChat({groupChannel}: SideBarChatProps) {
     const selectGroupChannel = useGroupChannelStore((state) => state.selectGroupChannel);
+    const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     const channel: Channel = groupChannel.channel;
 
     const clickOnChannel = () => {
-        onClickChannel();
+        setTypeWindow(CHAT_WINDOW);
         connectToChatChannel(groupChannel);
         selectGroupChannel(groupChannel);
     };

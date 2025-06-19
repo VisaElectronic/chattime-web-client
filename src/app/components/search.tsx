@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import FabMenu from './setting/fab-menu';
 
 const SearchBar = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -9,8 +10,8 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="w-full lg:w-85 p-3 top-0 sticky dark:bg-gray-800 border-b-[0.01px] dark:border-b-[#656565]">
-        <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+    <div className="w-full flex gap-5 lg:w-85 p-3 top-0 sticky dark:bg-gray-800 border-b-[0.01px] dark:border-b-[#656565]">
+        <form className="flex-auto" onSubmit={handleSubmit}>
             <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -44,6 +45,9 @@ const SearchBar = () => {
                 />
             </div>
         </form>
+        <div className='flex items-center'>
+            <FabMenu />
+        </div>
     </div>
   );
 };
