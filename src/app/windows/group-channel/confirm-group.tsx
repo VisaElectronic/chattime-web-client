@@ -2,31 +2,28 @@
 import { useState } from 'react'
 import { Avatar, TextInput, Button } from 'flowbite-react'
 import {
-  HiChevronLeft,
   HiCamera,
   HiUserAdd
 } from 'react-icons/hi'
-
-// mock of members you’ve already picked
-const SELECTED = [
-  { id: 1, name: 'Chantrea Chea', avatar: '/avatars/chantrea.jpg', status: 'last seen recently' },
-  { id: 2, name: 'Bob Sok', avatar: '/avatars/bob.jpg', status: 'last seen recently' },
-]
+import { useSearchContactStore } from '@/stores/search-contact'
+import { API_DOMAIN } from '@/constants/api'
+import BackButton from '@/app/components/setting/back-button'
+import { CREATE_GROUP_CHOOSE_USER } from '@/constants/window'
 
 export default function ConfirmGroup() {
   const [groupName, setGroupName] = useState('')
-
+  const selected_contacts = useSearchContactStore(state => state.selected_contacts);
   return (
     <div className='w-full px-5 bg-gray-900'>
       <div className="min-h-screen text-white">
         {/* Header */}
         <header className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-          <a><HiChevronLeft className="w-6 h-6 text-blue-400" /></a>
+          <BackButton typeWindow={CREATE_GROUP_CHOOSE_USER} />
           <h1 className="text-lg font-medium">New Group</h1>
           <Button
             color="light"
             size="sm"
-            disabled={!groupName || SELECTED.length === 0}
+            disabled={!groupName || selected_contacts.length === 0}
             onClick={() => {/* create group action */}}
           >
             Create
@@ -58,15 +55,15 @@ export default function ConfirmGroup() {
             </a>
 
             {/* Selected members */}
-            {SELECTED.map((u) => (
+            {selected_contacts.map((channel) => (
               <div
-                key={u.id}
+                key={channel.id}
                 className={`flex items-center p-4 space-x-4 border-t border-gray-700`}
               >
-                <Avatar img={u.avatar} rounded size="md" />
+                <Avatar img={API_DOMAIN + '/' + channel.user.avatar} rounded size="md" />
                 <div>
-                  <p className="font-medium">{u.name}</p>
-                  <p className="text-sm text-gray-400">{u.status}</p>
+                  <p className="font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
+                  <p className="text-xs text-blue-400">@{channel.user.username}</p>
                 </div>
               </div>
             ))}

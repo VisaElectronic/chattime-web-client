@@ -20,12 +20,14 @@ export const API_BASE_URL = `${API_DOMAIN}${API_PATH}`;
  */
 export const ENDPOINTS = {
     auth: {
-        login: `${API_BASE_URL}/login`,
-        logout: `${API_BASE_URL}/logout`,
-        register: `${API_BASE_URL}/register`,
+        login: `${API_DOMAIN}/login`,
+        logout: `${API_DOMAIN}/logout`,
+        register: `${API_DOMAIN}/register`,
     },
     user: {
-        profile: `${API_BASE_URL}/api/user/profile`,
+        profile: `${API_BASE_URL}/user/profile`,
     },
-    users: `${API_BASE_URL}/users`,
+    contact: {
+        search: `${API_BASE_URL}/contacts/search`,
+    }
 };

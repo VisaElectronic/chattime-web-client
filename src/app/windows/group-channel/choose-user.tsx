@@ -1,51 +1,64 @@
 // pages/select-users.jsx
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { TextInput, Checkbox, Avatar, Button } from 'flowbite-react'
 import { HiSearch } from 'react-icons/hi'
 import { useWindowContentStore } from '@/stores/window-content'
-import { CREATE_GROUP_CONFIRM } from '@/constants/window'
-
-// mock data – replace with your real contacts
-const CONTACTS = [
-    { id: 1, name: 'Alice Nguyen', username: 'alice_ng', avatar: '/avatars/alice.jpg' },
-    { id: 2, name: 'Bob Sok', username: 'bob_sok', avatar: '/avatars/bob.jpg' },
-    { id: 3, name: 'Chantrea Chea', username: 'chantrea_c', avatar: '/avatars/chan.jpg' },
-    // …etc
-]
+import { CREATE_GROUP_CONFIRM, EMPTY_WINDOW } from '@/constants/window'
+import { ContactService } from '@/services/contact.service'
+import Channel from '@/models/Channel'
+import { API_DOMAIN } from '@/constants/api'
+import { useSearchContactStore } from '@/stores/search-contact'
+import BackButton from '@/app/components/setting/back-button'
 
 export default function ChooseUser() {
     const [query, setQuery] = useState('')
-    const [selected, setSelected] = useState(new Set())
+    const [contacts, setContacts] = useState<Channel[]>([])
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
+    const selectedContact = useSearchContactStore(state => state.selectedContact);
+    const selected_contacts = useSearchContactStore(state => state.selected_contacts);
+    const unselectedContact = useSearchContactStore(state => state.unselectedContact);
+
+    useEffect(() => {
+        ContactService.searchChannel({
+            search: query
+        })
+        .then(data => setContacts(data))
+        .catch(err => console.error(err))
+    }, [query])
 
     // filter contacts by search term
     const filtered = useMemo(() => {
         const q = query.toLowerCase()
-        return CONTACTS.filter(u =>
-            u.name.toLowerCase().includes(q) ||
-            u.username.toLowerCase().includes(q)
+        return contacts.filter(channel =>
+            channel.user.username.toLowerCase().includes(q) ||
+            channel.user.firstname.toLowerCase().includes(q) ||
+            channel.user.lastname.toLowerCase().includes(q)
         )
-    }, [query])
+    }, [contacts, query])
 
     const toggle = (id: number) => {
-        setSelected(prev => {
-            const next = new Set(prev)
-            if(next.has(id)) next.delete(id)
-            else next.add(id)
-            return next
-        })
+        // 1️⃣ Find whether it’s already selected
+        const isSelected = selected_contacts.some(c => c.id === id)
+        // 2️⃣ Grab the channel once
+        const channel = contacts.find(c => c.id === id) ?? null
+
+        // 5️⃣ Now do the side-effects exactly once
+        if (isSelected) {
+            unselectedContact(channel)
+        } else {
+            selectedContact(channel)
+        }
     }
 
     return (
         <div className="w-full min-h-screen bg-gray-900 text-white p-4">
             {/* header */}
-            <header className="flex items-center justify-between mb-4">
-                <h1 className="text-lg font-semibold">
-                    Select Users {selected.size}/{CONTACTS.length}
-                </h1>
+            <header className="flex items-center justify-between pb-3 border-b border-gray-700">
+                <BackButton typeWindow={EMPTY_WINDOW} />
+                <h1 className="text-lg font-medium">New Group</h1>
                 <Button
                     size="sm"
-                    disabled={selected.size === 0}
+                    disabled={selected_contacts.length === 0}
                     onClick={() => {
                         setTypeWindow(CREATE_GROUP_CONFIRM)
                     }}
@@ -54,39 +67,44 @@ export default function ChooseUser() {
                 </Button>
             </header>
 
-            {/* search */}
-            <TextInput
-                className="mb-6"
-                placeholder="Who would you like to add?"
-                icon={HiSearch}
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-            />
-
             {/* list */}
-            <div>
-                <h2 className="text-sm font-bold mb-2">FREQUENT CONTACTS</h2>
+            <div className='py-4'>
+                <div className='flex flex-col gap-3'>
+                    <h1 className="text-lg font-semibold">
+                        Select Users {selected_contacts.length}/{contacts.length}
+                    </h1>
+
+                    {/* search */}
+                    <TextInput
+                        className=""
+                        placeholder="Who would you like to add?"
+                        icon={HiSearch}
+                        value={query}
+                        onChange={e => setQuery(e.target.value)}
+                    />
+                </div>
+                <h2 className="text-sm font-bold py-4">FREQUENT CONTACTS</h2>
                 <ul className="space-y-4">
-                    {filtered.map(user => (
+                    {filtered.map(channel => (
                         <li
-                            key={user.id}
-                            className="flex items-center justify-between p-2 rounded hover:bg-gray-800"
-                            onClick={() => toggle(user.id)}
+                            key={channel.id}
+                            className="flex items-center justify-between rounded hover:bg-gray-800"
+                            onClick={() => toggle(channel.id)}
                         >
                             <div className="flex items-center">
                                 <Avatar
-                                    img={user.avatar}
+                                    img={API_DOMAIN + '/' + channel.user.avatar}
                                     rounded
                                     size="md"
                                 />
                                 <div className="ml-3">
-                                    <p className="text-sm font-medium">{user.name}</p>
-                                    <p className="text-xs text-blue-400">@{user.username}</p>
+                                    <p className="text-sm font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
+                                    <p className="text-xs text-blue-400">@{channel.user.username}</p>
                                 </div>
                             </div>
                             <Checkbox
-                                checked={selected.has(user.id)}
-                                onChange={() => toggle(user.id)}
+                                checked={selected_contacts.some(c => c.id === channel.id)}
+                                onChange={() => toggle(channel.id)}
                             />
                         </li>
                     ))}

@@ -1,5 +1,3 @@
-// src/services/auth.service.ts
-
 import { ENDPOINTS } from "@/constants/api";
 import APIResponse from "@/dto/response";
 import User from "@/models/User";
