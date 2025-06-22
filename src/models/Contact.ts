@@ -1,12 +1,11 @@
 import Channel from "./Channel";
 
-export default class GroupChannel {
+export default class Contact {
     id: number;
     key: string;
     customFirstname: string;
     customLastname: string;
     channel: Channel;
-    channels: Channel[];
 
     constructor(
         id: number,
@@ -14,13 +13,11 @@ export default class GroupChannel {
         customFirstname: string,
         customLastname: string,
         channel: Channel,
-        channels: Channel[]
     ) {
         this.id = id
         this.key = key
         this.customFirstname = customFirstname
         this.customLastname = customLastname
         this.channel = channel
-        this.channels = channels
     }
 }

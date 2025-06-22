@@ -1,12 +1,7 @@
 import { FC, useState } from "react";
 import { Modal, Button, Label, TextInput, ModalBody } from "flowbite-react";
 import { FiXCircle } from "react-icons/fi";
-
-export interface ContactData {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-}
+import { ContactData } from "@/services/contact.service";
 
 interface AddContactModalProps {
   show: boolean;
@@ -29,7 +24,6 @@ const AddContactModal: FC<AddContactModalProps> = ({
     setFirstName("");
     setLastName("");
     setPhoneNumber("");
-    onClose();
   };
 
   return (

@@ -5,13 +5,30 @@ import {
     HiUserGroup,
 } from 'react-icons/hi'
 import AddContactModal from '../contact/add-contact';
+import { ContactData, ContactService } from '@/services/contact.service';
+import { useGroupChannelStore } from '@/stores/group-channel';
 
 export default function FabContactMenu() {
+    const addContact = useGroupChannelStore((state) => state.addItem);
     const [showAdd, setShowAdd] = useState(false);
 
-    const handleCreate = (data: unknown) => {
-        console.log("New contact:", data);
-        // ➞ call your API, update state, etc.
+    const handleCreate = async (data: ContactData) => {
+        try {
+            const res = await ContactService.addContact(data);
+            console.log(res);
+            if(res.success) {
+                addContact(res.data)
+                setShowAdd(false)
+                return
+            }
+            console.error(res.data)
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            } else {
+                console.error(String(err));
+            }
+        }
     };
     return (
         <div className="">

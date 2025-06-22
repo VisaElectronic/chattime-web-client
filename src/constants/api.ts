@@ -29,6 +29,7 @@ export const ENDPOINTS = {
     },
     contact: {
         search: `${API_BASE_URL}/contacts/search`,
+        store: `${API_BASE_URL}/contacts`,
     },
     file: {
         upload: `${API_BASE_URL}/files`,
