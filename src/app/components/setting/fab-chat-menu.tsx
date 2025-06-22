@@ -7,7 +7,7 @@ import {
     HiUserGroup,
 } from 'react-icons/hi'
 
-export default function FabMenu() {
+export default function FabChatMenu() {
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     return (
         <div className="">

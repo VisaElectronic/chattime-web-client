@@ -11,6 +11,8 @@ import SettingRow from "./setting/setting-row";
 import { useUserStore } from "@/stores/profile";
 import { useWindowContentStore } from "@/stores/window-content";
 import { PROFILE_DETAIL } from "@/constants/window";
+import SideBarContact from "./sidebar-contact";
+import SearchContact from "./search-contact";
 
 const tabs = [
   {
@@ -32,6 +34,14 @@ export default function Sidebar() {
   const groupChannels = useGroupChannelStore((state) => state.items);
   const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
   const profile = useUserStore((state) => state.item);
+
+  const getListOfContacts = () => {
+    const items: React.JSX.Element[] = [];
+    for (let i = 0; i < groupChannels.length; i++) {
+      items.push(<SideBarContact key={i} groupChannel={groupChannels[i]} />);
+    }
+    return items;
+  }
 
   const getListOfChats = () => {
     const items: React.JSX.Element[] = [];
@@ -70,13 +80,21 @@ export default function Sidebar() {
     switch (active) {
       case 1: return <>{getListOfChats()}</>;
       case 2: return <>{getListOfSettings()}</>;
-      default: return <>{getListOfChats()}</>;
+      default: return <>{getListOfContacts()}</>;
+    }
+  })();
+
+  const searchBar = (() => {
+    switch (active) {
+      case 1: return <>{<SearchBar />}</>;
+      case 2: return <>{<SearchBar />}</>;
+      default: return <>{<SearchContact />}</>;
     }
   })();
 
   return (
     <div className="h-full">
-      <SearchBar />
+      {searchBar}
       <div className={active == 2 ? "dark:text-white p-3 lg:p-6" : "dark:text-white"}>
         <ul className="space-y-2 font-medium">
           {content}

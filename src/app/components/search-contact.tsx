@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react';
-import FabChatMenu from './setting/fab-chat-menu';
+import FabContactMenu from './setting/fab-contact-menu';
 
-const SearchBar = () => {
+const SearchContact = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // TODO: add your submission logic here
@@ -46,10 +46,10 @@ const SearchBar = () => {
             </div>
         </form>
         <div className='flex items-center'>
-            <FabChatMenu />
+            <FabContactMenu />
         </div>
     </div>
   );
 };
 
-export default SearchBar;
+export default SearchContact;
