@@ -28,7 +28,7 @@ export default function SideBarChat({groupChannel}: SideBarChatProps) {
                 <div className="shrink-0">
                     <Image 
                         className="rounded-full" 
-                        src={API_DOMAIN + '/' + channel.user.avatar} 
+                        src={API_DOMAIN + '/' + channel?.user.avatar} 
                         alt="Neil image" 
                         width={35}
                         height={35}

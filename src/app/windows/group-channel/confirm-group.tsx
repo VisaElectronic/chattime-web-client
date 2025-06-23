@@ -7,9 +7,12 @@ import {
 import { useSearchContactStore } from '@/stores/search-contact'
 import { API_DOMAIN } from '@/constants/api'
 import BackButton from '@/app/components/setting/back-button'
-import { CREATE_GROUP_CHOOSE_USER } from '@/constants/window'
+import { CREATE_GROUP_CHOOSE_USER, EMPTY_WINDOW } from '@/constants/window'
 import Dropzone from '@/components/commons/dropzone'
 import { FileService } from '@/services/file.service'
+import { ContactService } from '@/services/contact.service'
+import { useGroupChannelStore } from '@/stores/group-channel'
+import { useWindowContentStore } from '@/stores/window-content'
 
 const UploadGroupProfile: React.FC<HTMLAttributes<HTMLElement>> = props => {
   return (
@@ -25,8 +28,11 @@ const UploadGroupProfile: React.FC<HTMLAttributes<HTMLElement>> = props => {
 export default function ConfirmGroup() {
   const [, setLoading] = useState(false)
   const [groupName, setGroupName] = useState('')
+  const [profilePath, setProfilePath] = useState('')
   const [files, setFiles] = useState<File[]>([])
   const selected_contacts = useSearchContactStore(state => state.selected_contacts);
+  const addGroupChannel = useGroupChannelStore((state) => state.addItem);
+  const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
 
   // called by your Dropzone onFiles
   const handleFiles = useCallback((acceptedFiles: File[]) => {
@@ -42,6 +48,7 @@ export default function ConfirmGroup() {
         files.forEach(f => formData.append('files', f))
         const res = await FileService.upload({files})
         if (res) {
+          setProfilePath(res.path)
           setFiles([])
         } else {
           throw new Error('Upload failed')
@@ -58,6 +65,27 @@ export default function ConfirmGroup() {
     }
     upload()
   }, [files])
+
+  const createGroup = async () => {
+    try {
+      const data = {
+        title: groupName,
+        profile: profilePath,
+        channelKeys: selected_contacts.map(c => c.key)
+      };
+      const res = await ContactService.createGroup(data)
+      if(res.data) {
+        addGroupChannel(res.data)
+        setTypeWindow(EMPTY_WINDOW)
+      }
+    } catch (err) {
+      console.error(err)
+      if (typeof err === "string") {
+          err.toUpperCase()
+      } else if (err instanceof Error) {
+      }
+    }
+  }
   return (
     <div className='w-full px-5 bg-gray-900'>
       <div className="min-h-screen text-white">
@@ -68,7 +96,7 @@ export default function ConfirmGroup() {
           <Button
             size="sm"
             disabled={!groupName || selected_contacts.length === 0}
-            onClick={() => {/* create group action */}}
+            onClick={createGroup}
           >
             Create
           </Button>

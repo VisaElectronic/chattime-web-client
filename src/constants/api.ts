@@ -30,6 +30,7 @@ export const ENDPOINTS = {
     contact: {
         search: `${API_BASE_URL}/contacts/search`,
         store: `${API_BASE_URL}/contacts`,
+        createGroup: `${API_BASE_URL}/contacts/group`,
     },
     file: {
         upload: `${API_BASE_URL}/files`,

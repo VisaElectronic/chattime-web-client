@@ -14,6 +14,12 @@ export interface ContactData {
   phoneNumber: string;
 }
 
+export interface CreateGroupData {
+  title: string;
+  profile: string;
+  channelKeys: string[];
+}
+
 export class ContactService {
     /** POST /api/auth/login */
     static async searchChannel({ search }: SearchChannelParams): Promise<Channel[]> {
@@ -23,6 +29,13 @@ export class ContactService {
 
     static async addContact(data: ContactData): Promise<APIResponse<GroupChannel>> {
         const res = await Http.post<APIResponse<GroupChannel>>(ENDPOINTS.contact.store, data, {
+            'Content-Type': 'application/json',
+        });
+        return res;
+    }
+
+    static async createGroup(data: CreateGroupData): Promise<APIResponse<GroupChannel>> {
+        const res = await Http.post<APIResponse<GroupChannel>>(ENDPOINTS.contact.createGroup, data, {
             'Content-Type': 'application/json',
         });
         return res;
