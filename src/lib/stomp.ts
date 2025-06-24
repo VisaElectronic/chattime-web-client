@@ -1,6 +1,6 @@
 import { WS_DOMAIN, WS_ENDPOINTS } from '@/constants/ws'
 import WSResponse from '@/dto/ws/response';
-import { Client, IMessage, Frame } from '@stomp/stompjs'
+import { Client, IMessage, Frame, StompSubscription } from '@stomp/stompjs'
 import { v4 as uuidv4 } from "uuid";
 import User from '@/models/User';
 import GroupChannel from '@/models/GroupChannel';
@@ -9,6 +9,8 @@ import { LOGIN_ROUTE } from '@/constants/routes';
 import { useMessageStore } from '@/stores/message-store';
 
 let stompClient: Client | null = null
+let chatChannelSub: StompSubscription | undefined;
+let chatSub: StompSubscription | undefined;
 
 export function connectStomp(access_token: string) {
     if (typeof window === 'undefined') return
@@ -39,7 +41,7 @@ export function connectStomp(access_token: string) {
         stompClient?.subscribe(WS_ENDPOINTS.AUTH.SUB + ws_id, (message: IMessage) => {
             const body: WSResponse<User> = message.body ? JSON.parse(message.body) : null;
             console.log('Received message:', body)
-            if(body.data as unknown === 'token_expired') window.location.href = LOGIN_ROUTE;
+            if (body.data as unknown === 'token_expired') window.location.href = LOGIN_ROUTE;
             connectToOnline(body);
         })
         sendWSMessage(
@@ -79,7 +81,7 @@ export function sendWSMessage(destination: string, payload: unknown) {
 export function connectToOnline(res: WSResponse<User>) {
     stompClient?.subscribe(WS_ENDPOINTS.ONLINE.SUB(res.data.key), (message: IMessage) => {
         const body: WSResponse<GroupChannel[]> = message.body ? JSON.parse(message.body) : null;
-        console.log('Received message:', body)
+        console.log('Received GroupChannel:', JSON.parse(message.body))
         useGroupChannelStore.getState().addItems(body.data);
     })
     sendWSMessage(
@@ -92,7 +94,8 @@ export function connectToOnline(res: WSResponse<User>) {
 }
 
 export function connectToChatChannel(groupChannel: GroupChannel) {
-    stompClient?.subscribe(WS_ENDPOINTS.CONNECT_CHAT.SUB(groupChannel.key), (message: IMessage) => {
+    if(chatChannelSub) disconnectChatChannel();
+    chatChannelSub = stompClient?.subscribe(WS_ENDPOINTS.CONNECT_CHAT.SUB(groupChannel.key), (message: IMessage) => {
         const body = message.body ? JSON.parse(message.body) : null;
         console.log('Received message:', body)
         useMessageStore.getState().addItems(body.data);
@@ -107,7 +110,8 @@ export function connectToChatChannel(groupChannel: GroupChannel) {
 }
 
 export function connectToChat(groupChannel: GroupChannel) {
-    stompClient?.subscribe(WS_ENDPOINTS.CHAT.SUB(groupChannel.key), (message: IMessage) => {
+    if(chatSub) disconnectChat();
+    chatSub = stompClient?.subscribe(WS_ENDPOINTS.CHAT.SUB(groupChannel.key), (message: IMessage) => {
         const body = message.body ? JSON.parse(message.body) : null;
         console.log('Received message:', body)
         useMessageStore.getState().addItem(body.data);
@@ -115,7 +119,7 @@ export function connectToChat(groupChannel: GroupChannel) {
 }
 
 export function sendChatMessage(text: string, groupChannel?: GroupChannel) {
-    if(!groupChannel) {
+    if (!groupChannel) {
         console.error('No Channel');
         return;
     }
@@ -126,4 +130,16 @@ export function sendChatMessage(text: string, groupChannel?: GroupChannel) {
             type: 'TEXT',
         }
     )
+}
+
+export function disconnectChatChannel() {
+    if (chatChannelSub) {
+        chatChannelSub.unsubscribe();
+    }
+}
+
+export function disconnectChat() {
+    if (chatSub) {
+        chatSub.unsubscribe();
+    }
 }

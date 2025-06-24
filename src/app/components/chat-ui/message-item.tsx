@@ -5,19 +5,19 @@ import React from "react";
 
 interface MessageBubbleProps {
   content: string;
-  ofCurrentUser: boolean;
+  isCurrentUser: boolean;
   createdAt: string;
   avatar: string;
 }
 
-export default function MessageBubble({ content, ofCurrentUser, createdAt, avatar }: MessageBubbleProps) {
-  const alignment = ofCurrentUser ? "justify-end" : "justify-start";
-  const bubbleStyle = ofCurrentUser ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-200";
+export default function MessageBubble({ content, isCurrentUser, createdAt, avatar }: MessageBubbleProps) {
+  const alignment = isCurrentUser ? "justify-end" : "justify-start";
+  const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-200";
 
   return (
     <div className={`flex ${alignment} gap-1`}>
       {
-        !ofCurrentUser && avatar &&
+        !isCurrentUser && avatar &&
         <div className="flex flex-col justify-end">
           <div>
             <Image
@@ -35,7 +35,7 @@ export default function MessageBubble({ content, ofCurrentUser, createdAt, avata
         <span className="block text-[10px] text-gray-400 text-right mt-1">{new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
       </div>
       {
-        ofCurrentUser && avatar &&
+        isCurrentUser && avatar &&
         <div className="flex flex-col justify-end">
           <div>
             <Image

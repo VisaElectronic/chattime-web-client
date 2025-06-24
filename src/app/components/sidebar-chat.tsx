@@ -15,6 +15,8 @@ export default function SideBarChat({groupChannel}: SideBarChatProps) {
     const selectGroupChannel = useGroupChannelStore((state) => state.selectGroupChannel);
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     const channel: Channel = groupChannel.channel;
+    const profile = groupChannel.group ? groupChannel.photo : channel?.user.avatar;
+    const fullname = groupChannel.group ? groupChannel.name : channel?.user.firstname + ' ' + channel?.user.lastname;
 
     const clickOnChannel = () => {
         setTypeWindow(CHAT_WINDOW);
@@ -28,7 +30,7 @@ export default function SideBarChat({groupChannel}: SideBarChatProps) {
                 <div className="shrink-0">
                     <Image 
                         className="rounded-full" 
-                        src={API_DOMAIN + '/' + channel?.user.avatar} 
+                        src={API_DOMAIN + '/' + profile} 
                         alt="Neil image" 
                         width={35}
                         height={35}
@@ -36,15 +38,15 @@ export default function SideBarChat({groupChannel}: SideBarChatProps) {
                 </div>
                 <div className="flex-1 min-w-0 ms-4">
                     <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                        {channel.user.username}
+                        {fullname}
                     </p>
                     <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                         Hi There!
                     </p>
                 </div>
-                <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                {/* <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
                     168
-                </div>
+                </div> */}
             </div>
         </li>
     );
