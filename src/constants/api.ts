@@ -34,5 +34,9 @@ export const ENDPOINTS = {
     },
     file: {
         upload: `${API_BASE_URL}/files`,
-    }
+    },
+};
+
+export const DEFAULT_DATA = {
+    PROFILE: `${API_DOMAIN}/uploads/default-user.png`,  
 };

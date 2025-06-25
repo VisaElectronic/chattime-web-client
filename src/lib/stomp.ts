@@ -104,7 +104,8 @@ export function connectToChatChannel(groupChannel: GroupChannel) {
     sendWSMessage(
         WS_ENDPOINTS.CONNECT_CHAT.PUB(groupChannel.key),
         {
-            isGroup: groupChannel.channel ? false : true
+            limit: 30,
+            offset: 0
         }
     )
 }

@@ -1,4 +1,5 @@
 // src/components/ChatHeader.jsx
+import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
 import Image from "next/image";
 import React from "react";
 import { FiMoreHorizontal, FiSearch } from "react-icons/fi";
@@ -16,7 +17,7 @@ export default function ChatHeader({ title = '', avatars = [] }: ChatHeaderProps
                 {avatars.slice(0, 4).map((url, idx) => (
                     <Image
                         key={idx}
-                        src={url}
+                        src={API_DOMAIN + '/' + (url ?? DEFAULT_DATA.PROFILE)}
                         width={50}
                         height={50}
                         alt={`member-${idx}`}

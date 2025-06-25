@@ -1,5 +1,5 @@
 // src/components/ChatWindow.jsx
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ChatHeader from "./chat-header";
 import MessageList from "./message-list";
 import ChatInput from "./chat-input";
@@ -7,14 +7,19 @@ import { useMessageStore } from "@/stores/message-store";
 import { sendChatMessage } from "@/lib/stomp";
 import { useGroupChannelStore } from "@/stores/group-channel";
 
-// Dummy avatar URLs for header (replace with your own)
-const dummyHeaderAvatars = [
-    "https://i.pravatar.cc/40?img=5",
-];
-
 export default function ChatWindow() {
     const selectedGroupChannel = useGroupChannelStore((state) => state.selectedGroupChannel);
     const messages = useMessageStore((state) => state.items);
+    const [profile, setProfile] = useState('');
+    const [fullname, setFullname] = useState('');
+
+    useEffect(() => {
+        if(selectedGroupChannel) {
+            const channel = selectedGroupChannel.channel;
+            setProfile(selectedGroupChannel.group ? selectedGroupChannel.photo : channel?.user.avatar);
+            setFullname(selectedGroupChannel.group ? selectedGroupChannel.name : channel?.user.firstname + ' ' + channel?.user.lastname);
+        }
+    }, [selectedGroupChannel])
 
     // When the user sends a new message, append it
     const handleSend = useCallback(
@@ -29,7 +34,7 @@ export default function ChatWindow() {
         <div className="flex flex-col h-screen w-full">
             {/* 1. Header — fixed height */}
             <div className="flex-none">
-                <ChatHeader title="Social Demo" avatars={dummyHeaderAvatars} />
+                <ChatHeader title={fullname} avatars={[profile]} />
             </div>
 
             {/* 2. Message List — flex & scroll */}
