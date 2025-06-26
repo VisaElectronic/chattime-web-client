@@ -4,6 +4,7 @@ import Loading from "@/components/commons/loading";
 import { CHAT_ROUTE } from "@/constants/routes";
 import LoginResponse from "@/dto/auth/login.response";
 import { AuthService } from "@/services/auth.service";
+import { useUserStore } from "@/stores/profile";
 import { Button, Label, TextInput, Checkbox } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const setUser = useUserStore((state) => state.setUser);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ export default function LoginPage() {
     try {
       const response: LoginResponse = await AuthService.login({ email, password });
       AuthService.storeAuthToken(response.data.accessToken);
+      setUser(response.data.profile)
       router.push(CHAT_ROUTE); // or wherever you want to go
     } catch (err: unknown) {
       if (err instanceof Error) {
