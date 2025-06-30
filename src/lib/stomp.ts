@@ -1,4 +1,4 @@
-import { WS_DOMAIN, WS_ENDPOINTS } from '@/constants/ws'
+import { WS_CONNECTION_TYPES, WS_DOMAIN, WS_ENDPOINTS } from '@/constants/ws'
 import WSResponse from '@/dto/ws/response';
 import { Client, IMessage, Frame, StompSubscription } from '@stomp/stompjs'
 import { v4 as uuidv4 } from "uuid";
@@ -7,6 +7,7 @@ import GroupChannel from '@/models/GroupChannel';
 import { useGroupChannelStore } from '@/stores/group-channel';
 import { LOGIN_ROUTE } from '@/constants/routes';
 import { useMessageStore } from '@/stores/message-store';
+import OnlineResponse from '@/dto/ws/group-channel/online';
 
 let stompClient: Client | null = null
 let chatChannelSub: StompSubscription | undefined;
@@ -80,9 +81,13 @@ export function sendWSMessage(destination: string, payload: unknown) {
 
 export function connectToOnline(res: WSResponse<User>) {
     stompClient?.subscribe(WS_ENDPOINTS.ONLINE.SUB(res.data.key), (message: IMessage) => {
-        const body: WSResponse<GroupChannel[]> = message.body ? JSON.parse(message.body) : null;
-        console.log('Received GroupChannel:', JSON.parse(message.body))
-        useGroupChannelStore.getState().addItems(body.data);
+        const body: WSResponse<OnlineResponse<GroupChannel[]>> = message.body ? JSON.parse(message.body) : null;
+        console.log('Received OnlineResponse:', JSON.parse(message.body))
+        if(body.data.type === WS_CONNECTION_TYPES.ONLINE.LIST_GROUPS) {
+            useGroupChannelStore.getState().addItems(body.data.groups);
+        } else {
+            console.log('Received OnlineResponse Notify:', body)
+        }
     })
     sendWSMessage(
         WS_ENDPOINTS.ONLINE.PUB(res.data.key),

@@ -18,3 +18,10 @@ export const WS_ENDPOINTS = {
         PUB: (channel_key: string) => "/app/channel/" + channel_key + "/chat",
     }
 };
+
+export const WS_CONNECTION_TYPES ={
+    ONLINE: {
+        LIST_GROUPS: 'LIST_GROUPS',
+        NOTIFY_GROUP: 'NOTIFY_GROUP',
+    }
+}
