@@ -22,10 +22,10 @@ export function connectStomp(access_token: string) {
     stompClient = new Client({
         // Replace with your WebSocket endpoint
         brokerURL: WS_DOMAIN,
-        connectHeaders: {
-            // If your backend expects an Authorization header
-            Authorization: `Bearer ${access_token}`,
-        },
+        // connectHeaders: {
+        //     // If your backend expects an Authorization header
+        //     Authorization: `Bearer ${access_token}`,
+        // },
         // Optional: enable logging
         debug: (str) => {
             console.debug('[STOMP]', str)
