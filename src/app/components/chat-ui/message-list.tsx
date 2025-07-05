@@ -10,6 +10,7 @@ interface MessageListProp {
 export default function MessageList({messages}: MessageListProp) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const currentUser = useUserStore(state => state.item);
+  messages = [...messages].reverse();
 
   useEffect(() => {
     // whenever messages change, scroll the bottom sentinel into view

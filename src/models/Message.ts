@@ -6,19 +6,21 @@ export default class Message {
     content: string;
     group: GroupChannel;
     user: User;
-    createdAt: string;
+    createdAt: Date;
 
     constructor(
         id: number,
         content: string,
         group: GroupChannel,
         user: User,
-        createdAt: string,
+        createdAt: Date | string,
     ) {
         this.id = id
         this.content = content
         this.group = group
         this.user = user
-        this.createdAt = createdAt
+        this.createdAt = typeof createdAt === 'string'
+            ? new Date(createdAt)
+            : createdAt
     }
 }

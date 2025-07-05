@@ -21,7 +21,7 @@ export const useMessageStore = create<MessageState>((set) => ({
     
     addItem: (item: Message) =>
         set((state) => ({
-            items: [...state.items, item],
+            items: [item, ...state.items],
         })),
     
     addItems: (items: Message[]) =>
