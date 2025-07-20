@@ -6,8 +6,11 @@ import ChatInput from "./chat-input";
 import { useMessageStore } from "@/stores/message-store";
 import { sendChatMessage } from "@/lib/stomp";
 import { useGroupChannelStore } from "@/stores/group-channel";
+import { useWindowContentStore } from "@/stores/window-content";
+import { CHAT_DETAIL } from "@/constants/window";
 
 export default function ChatWindow() {
+    const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     const selectedGroupChannel = useGroupChannelStore((state) => state.selectedGroupChannel);
     const messages = useMessageStore((state) => state.items);
     const [profile, setProfile] = useState('');
@@ -30,10 +33,14 @@ export default function ChatWindow() {
         [selectedGroupChannel]
     );
 
+    const goDetail = () => {
+        setTypeWindow(CHAT_DETAIL);
+    };
+
     return (
         <div className="flex flex-col h-screen w-full">
             {/* 1. Header — fixed height */}
-            <div className="flex-none">
+            <div className="flex-none cursor-pointer" onClick={goDetail}>
                 <ChatHeader title={fullname} avatars={[profile]} />
             </div>
 

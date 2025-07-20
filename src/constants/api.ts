@@ -32,6 +32,12 @@ export const ENDPOINTS = {
         store: `${API_BASE_URL}/contacts`,
         createGroup: `${API_BASE_URL}/contacts/group`,
     },
+    group: {
+        create: `${API_BASE_URL}/group`,
+        detail: (group_key: string) => `${API_BASE_URL}/group/${group_key}`,
+        update: (group_key: string) => `${API_BASE_URL}/group/${group_key}`,
+        removeMember: (group_key: string) => `${API_BASE_URL}/group/${group_key}/members`,
+    },
     file: {
         upload: `${API_BASE_URL}/files`,
     },

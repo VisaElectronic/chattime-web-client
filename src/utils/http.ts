@@ -97,11 +97,45 @@ export class Http {
      */
     static postForm<T>(
         url: string,
-        body: Record<string, string | number | File | Blob | (string | number | File | Blob)[]>,
+        body: Record<string, string | number | File | File[] | Blob | string[] | null | undefined | (string | number | File | Blob)[]>,
         headers: Record<string, string> = {}
     ): Promise<T> {
         const formData = new FormData();
 
+        this.prepareFormData(formData, body);
+
+        return this.request<T>(url, {
+            method: "POST",
+            headers: {
+                ...headers,
+            },
+            body: formData,
+        });
+    }
+
+    /**
+     * POST form-urlencoded data
+     */
+    static deleteForm<T>(
+        url: string,
+        body: Record<string, string | number | File | File[] | Blob | string[] | null | undefined | (string | number | File | Blob)[]>,
+        headers: Record<string, string> = {}
+    ): Promise<T> {
+        const formData = new FormData();
+
+        this.prepareFormData(formData, body);
+
+        return this.request<T>(url, {
+            method: "DELETE",
+            headers: {
+                ...headers,
+            },
+            body: formData,
+        });
+    }
+
+    static prepareFormData(formData: FormData, body: Record<string, string | number | File | File[] | Blob | string[] | null | undefined | (string | number | File | Blob)[]>) {
+        if(!body) return;
         Object.entries(body).forEach(([key, value]) => {
             if (Array.isArray(value)) {
                 // append each array item under the same field name
@@ -117,14 +151,6 @@ export class Http {
             } else {
                 formData.append(key, String(value));
             }
-        });
-
-        return this.request<T>(url, {
-            method: "POST",
-            headers: {
-                ...headers,
-            },
-            body: formData,
         });
     }
 }
