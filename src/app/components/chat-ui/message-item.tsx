@@ -1,6 +1,6 @@
 // src/components/MessageItem.jsx
-import { API_DOMAIN } from "@/constants/api";
-import Image from "next/image";
+import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
+import { Avatar } from "flowbite-react";
 import React from "react";
 
 interface MessageBubbleProps {
@@ -21,12 +21,9 @@ export default function MessageBubble({ content, isCurrentUser, createdAt, avata
         !isCurrentUser && avatar &&
         <div className="flex flex-col justify-end">
           <div>
-            <Image
-            src={API_DOMAIN + '/' + avatar}
-            width={35}
-            height={35}
-            alt="profile"
-            className="rounded-full object-cover"
+            <Avatar
+              img={API_DOMAIN + '/' + (avatar ? avatar : DEFAULT_DATA.PROFILE)}
+              rounded
             />
           </div>
         </div>
@@ -45,12 +42,9 @@ export default function MessageBubble({ content, isCurrentUser, createdAt, avata
         isCurrentUser && avatar &&
         <div className="flex flex-col justify-end">
           <div>
-            <Image
-            src={API_DOMAIN + '/' + avatar}
-            width={35}
-            height={35}
-            alt="profile"
-            className="rounded-full object-cover"
+            <Avatar
+              img={API_DOMAIN + '/' + (avatar ? avatar : DEFAULT_DATA.PROFILE)}
+              rounded
             />
           </div>
         </div>

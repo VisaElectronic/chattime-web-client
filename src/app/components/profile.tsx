@@ -1,22 +1,22 @@
-import Image from "next/image";
+import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
+import { Avatar } from "flowbite-react";
 
 interface ProfileProp {
+    avatar: string;
     title: string;
     phone: string;
     username: string;
 }
 
-export default function Profile({title, phone, username}: ProfileProp) {
+export default function Profile({avatar, title, phone, username}: ProfileProp) {
     return (
         <li>
             <div className="flex items-center">
                 <div className="shrink-0">
-                    <Image 
-                        className="rounded-full" 
-                        src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" 
-                        alt="Neil image" 
-                        width={50}
-                        height={50}
+                    <Avatar
+                        size="md"
+                        img={API_DOMAIN + '/' + (avatar ? avatar : DEFAULT_DATA.PROFILE)}
+                        rounded
                     />
                 </div>
                 <div className="flex-1 min-w-0 ms-4">

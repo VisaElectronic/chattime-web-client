@@ -1,6 +1,6 @@
 // src/components/ChatHeader.jsx
 import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
-import Image from "next/image";
+import { Avatar } from "flowbite-react";
 import React from "react";
 import { FiMoreHorizontal, FiSearch } from "react-icons/fi";
 
@@ -15,13 +15,10 @@ export default function ChatHeader({ title = '', avatars = [] }: ChatHeaderProps
             {/* Composite avatars: show up to 4 overlapping */}
             <div className="flex -space-x-2">
                 {avatars.slice(0, 4).map((url, idx) => (
-                    <Image
+                    <Avatar
                         key={idx}
-                        src={API_DOMAIN + '/' + (url ?? DEFAULT_DATA.PROFILE)}
-                        width={50}
-                        height={50}
-                        alt={`member-${idx}`}
-                        className="h-8 w-8 rounded-full ring-2 ring-discordDark object-cover"
+                        img={API_DOMAIN + '/' + (url ? url : DEFAULT_DATA.PROFILE)}
+                        rounded
                     />
                 ))}
             </div>

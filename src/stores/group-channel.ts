@@ -9,9 +9,11 @@ type ChannelState = {
     items: GroupChannel[]
     selectedGroupChannel?: GroupChannel
     addItem: (item: GroupChannel) => void
+    updateGroupChannel: (item: GroupChannel) => void
     addItems: (items: GroupChannel[]) => void
     removeItem: (id: number) => void
     clearAll: () => void
+    updateSelectGroupChannel: (item: GroupChannel) => void
     selectGroupChannel: (item: GroupChannel) => void
 }
 
@@ -24,7 +26,23 @@ export const useGroupChannelStore = create<ChannelState>((set) => ({
         set((state) => ({
             items: [...state.items, item],
         })),
-    
+
+    updateGroupChannel: (item: GroupChannel) =>
+        set((state) => {
+            return {
+                items: state.items.map(gc => {
+                    if (gc.key === item.key) {
+                        gc = {
+                            ...gc,
+                            name: item.name,
+                            photo: item.photo
+                        }
+                    }
+                    return gc;
+                }),
+            }
+        }),
+
     addItems: (items: GroupChannel[]) =>
         set(() => ({
             items: [...items],
@@ -38,5 +56,16 @@ export const useGroupChannelStore = create<ChannelState>((set) => ({
     clearAll: () => set({ items: [] }),
     selectGroupChannel: (item: GroupChannel) => set(() => ({
         selectedGroupChannel: item
-    }))
+    })),
+    updateSelectGroupChannel: (item: GroupChannel) => 
+        set((state) => {
+            const selectedGroupChannel = state.selectedGroupChannel!;
+            return {
+                selectedGroupChannel: {
+                    ...selectedGroupChannel,
+                    name: item.name,
+                    photo: item.photo
+                }
+            }
+        }),
 }))

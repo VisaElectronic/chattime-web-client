@@ -5,7 +5,7 @@ import Channel from "@/models/Channel";
 import GroupChannel from "@/models/GroupChannel";
 import { useGroupChannelStore } from "@/stores/group-channel";
 import { useWindowContentStore } from "@/stores/window-content";
-import Image from "next/image";
+import { Avatar } from "flowbite-react";
 
 type SideBarContactProps = {
     groupChannel: GroupChannel;
@@ -28,12 +28,9 @@ export default function SideBarContact({groupChannel}: SideBarContactProps) {
         <li onClick={clickOnChannel}>
             <div className="flex items-center p-3">
                 <div className="shrink-0">
-                    <Image 
-                        className="rounded-full" 
-                        src={API_DOMAIN + '/' + profile} 
-                        alt="Neil image" 
-                        width={35}
-                        height={35}
+                    <Avatar
+                        img={API_DOMAIN + '/' + (profile ? profile : '/uploads/default-user.png')}
+                        rounded
                     />
                 </div>
                 <div className="flex-1 min-w-0 ms-4">

@@ -5,18 +5,19 @@ import { UserService } from "@/services/user.service";
 import { useUserStore } from "@/stores/profile";
 import { useRouter } from "next/navigation";
 import React, {useCallback, useEffect, useState } from "react";
-import { Datepicker } from "flowbite-react";
+import { Avatar, Datepicker } from "flowbite-react";
 import Dropzone from "@/components/commons/dropzone";
 import { HiCamera } from "react-icons/hi";
 import ProfileDetailHeader from "./profile-detail-header";
 import Loading from "@/components/commons/loading";
-import { API_DOMAIN } from "@/constants/api";
-import RoundedImage from "@/components/commons/rounded-image";
+import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
 import UpdateProfileDto from "@/dto/user/update-profile.request";
 import { UtilService } from "@/services/util.service";
+import { toast } from "react-toastify";
 
 export default function ProfileSettings() {
   const router = useRouter();
+  const notify = (desc: string) => toast.success(desc);
   const [profile, setProfile] = useState<User | null>(null);
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ export default function ProfileSettings() {
   const [lastname, setLastname] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const [dob, setDob] = useState<Date | null>(profile?.dob ? new Date(profile?.dob) : null);
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -77,7 +78,11 @@ export default function ProfileSettings() {
         dob: dob ? UtilService.formatToYYYYMMDD(dob) : '',
         avatar: files
       };
-      await UserService.updateProfile(bodyForm);
+      const res = await UserService.updateProfile(bodyForm);
+      if(res) {
+        notify('Profile updated successfully.');
+        setUser(res);
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
@@ -96,22 +101,29 @@ export default function ProfileSettings() {
       <div className="flex items-center justify-center py-8 px-4">
         <div className="w-full max-w-lg rounded-xl shadow-lg p-6 space-y-6">
           {/* Profile Photo + Name */}
-          <div className="flex items-center space-x-4 bg-gray-800 rounded-lg p-2">
+          <div className="flex items-center space-x-4 bg-gray-800 rounded-lg p-2 gap-3">
             <div className={
-              'w-16 h-16 rounded-full overflow-hidden cursor-pointer m-0 pr-2 flex justify-center items-center' + (!files || files.length <= 0 ? '' : '')
+              'relative overflow-hidden cursor-pointer m-0 flex justify-center items-center' + (!files || files.length <= 0 ? '' : '')
             }>
               <Dropzone
                 onFiles={handleFiles}
+                previewSize="lg"
               >
                 {
                   (!files || files.length <= 0) && !profile?.avatar ? <HiCamera className="w-6 h-6 text-gray-400" /> :
-                  <RoundedImage
-                    src={API_DOMAIN + '/' + profile?.avatar}
-                    alt="Profile"
-                    width={50}
-                    height={50}
-                    className="object-cover w-full h-full" 
-                  />
+                  <>
+                    <Avatar
+                        size="lg"
+                        img={API_DOMAIN + '/' + (profile?.avatar ? profile.avatar : DEFAULT_DATA.PROFILE)}
+                        rounded
+                        className='opacity-50'
+                    />
+                    <HiCamera className="
+                        absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                        w-10 h-10 text-gray-400
+                    "
+                    />
+                  </>
                 }
               </Dropzone>
             </div>
@@ -170,7 +182,7 @@ export default function ProfileSettings() {
           {/* Settings List */}
           <div className="divide-y divide-gray-700 bg-gray-800 px-4 rounded-lg">
             <ProfileField label="Username" value={profile?.username ? '@' + profile?.username : ''} />
-            <ProfileField label="Change Number" value={profile?.phone} />
+            <ProfileField label="Phone Number" value={profile?.phone} />
             {/* <ProfileField label="Your Name Color" customElement={<div className="w-6 h-6 rounded-full bg-pink-500" />} />
             <ProfileField label="Personal Channel" actionText="Add" /> */}
           </div>

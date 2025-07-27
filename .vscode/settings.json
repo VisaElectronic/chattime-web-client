@@ -16,5 +16,10 @@
       "createTheme(?:<\\w+>)?\\s*\\(([^)]*)\\)",
       "{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"
     ]
-  ]
+  ],
+  "go.goroot": "/Users/sophavisa/.local/share/mise/installs/go/1.24.5",
+  "go.alternateTools": {
+    "go": "/Users/sophavisa/.local/share/mise/shims/go",
+    "dlv": "/Users/sophavisa/.local/share/mise/shims/dlv"
+  }
 }

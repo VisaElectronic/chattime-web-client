@@ -38,7 +38,7 @@ export default function Sidebar() {
   const getListOfContacts = () => {
     const items: React.JSX.Element[] = [];
     for (let i = 0; i < groupChannels.length; i++) {
-      items.push(<SideBarContact key={i} groupChannel={groupChannels[i]} />);
+      if(!groupChannels[i].group) items.push(<SideBarContact key={i} groupChannel={groupChannels[i]} />);
     }
     return items;
   }
@@ -61,7 +61,8 @@ export default function Sidebar() {
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setTypeWindow(PROFILE_DETAIL)}
       >
-        <Profile 
+        <Profile
+          avatar={profile?.avatar ?? ''}
           title={profile ? profile.firstname + ' ' + profile.lastname : ''} 
           phone={profile?.phone ?? ''}
           username={profile?.username ?? ''}

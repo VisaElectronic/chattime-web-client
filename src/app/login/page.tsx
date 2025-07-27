@@ -7,7 +7,7 @@ import { AuthService } from "@/services/auth.service";
 import { useUserStore } from "@/stores/profile";
 import { Button, Label, TextInput, Checkbox } from "flowbite-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,6 +17,10 @@ export default function LoginPage() {
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
+
+  useEffect(() => {
+    AuthService.removeAuthToken();
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

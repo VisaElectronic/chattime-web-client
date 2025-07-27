@@ -1,7 +1,7 @@
 // components/Dropzone.tsx
 'use client'
 
-import Image from 'next/image';
+import { Avatar } from 'flowbite-react';
 import React, { useCallback, useState, ReactElement, CSSProperties } from 'react'
 import { useDropzone } from 'react-dropzone'
 
@@ -13,12 +13,16 @@ interface DropzoneProps {
     children: ReactElement;
     /** optional inline styles for the preview grid */
     previewContainerStyle?: CSSProperties;
+    previewSize?: string ;
+    previewClassName?: string;
 }
 
 export default function Dropzone({
     onFiles,
     children,
     previewContainerStyle,
+    previewSize,
+    previewClassName
 }: DropzoneProps) {
     const [previews, setPreviews] = useState<FileWithPreview[]>([])
 
@@ -45,17 +49,16 @@ export default function Dropzone({
             {previews.length > 0 && (
                 <div 
                     className='overflow-hidden border border-gray-300 rounded-[50%] inline-block'
-                    style={{width: '50px', height: '50px', ...previewContainerStyle }}>
+                    style={{...previewContainerStyle }}>
                     {previews.map((file, i) => (
                         <div 
                             className="h-full relative group"
                             key={i}>
-                            <Image
-                                key={i}
-                                src={file.preview}
-                                alt={file.name}
-                                width={50}
-                                height={50}
+                            <Avatar
+                                size={previewSize ? previewSize : 'md'}
+                                img={file.preview}
+                                rounded
+                                className={previewClassName ? previewClassName : ''}
                             />
                             <button
                                 onClick={e => {

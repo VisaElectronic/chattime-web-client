@@ -1,5 +1,5 @@
 import CardCustom from '@/components/commons/card-custom';
-import { API_DOMAIN } from '@/constants/api';
+import { API_DOMAIN, DEFAULT_DATA } from '@/constants/api';
 import { GroupService } from '@/services/group.service';
 import { Avatar, Tabs, List, Badge, TabItem, ListItem } from 'flowbite-react';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { ContextMenu, ContextMenuItem } from '@/components/commons/context/conte
 import { toast } from 'react-toastify';
 import Loading from '@/components/commons/loading';
 import { useWindowContentStore } from '@/stores/window-content';
-import { CHAT_WINDOW } from '@/constants/window';
+import { CHAT_DETAIL_EDIT, CHAT_WINDOW } from '@/constants/window';
 
 export default function ChatDetailScreen() {
     const notify = (desc: string) => toast.success(desc);
@@ -101,14 +101,26 @@ export default function ChatDetailScreen() {
                         Back
                     </div>
                     <h1 className="text-xl font-semibold">Info</h1>
-                    <span>Edit</span>
+                    {
+                        selectedGroupChannel.group ?
+                        <div
+                            className='cursor-pointer'
+                            onClick={() => setTypeWindow(CHAT_DETAIL_EDIT)}
+                        >
+                            Edit
+                        </div> : <div></div>
+                    }
                 </header>
 
                 <div className='my-5'>
                     {/* Avatar & Title */}
                     <div className="flex flex-col items-center">
-                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-teal-400 to-blue-600 flex items-center justify-center text-6xl">
-                            <Avatar img={API_DOMAIN + '/' + (chatPhoto ? chatPhoto : '/uploads/default-user.png')} rounded />
+                        <div className="rounded-full bg-gradient-to-br from-teal-400 to-blue-600 flex items-center justify-center text-6xl">
+                            <Avatar
+                                size="xl"
+                                img={API_DOMAIN + '/' + (chatPhoto ? chatPhoto : DEFAULT_DATA.PROFILE)}
+                                rounded
+                            />
                         </div>
                         <h2 className="mt-4 text-2xl font-bold">{chatName}</h2>
                         <p className="text-gray-400">{members.length} members</p>
