@@ -7,6 +7,9 @@ export default class Message {
     group: GroupChannel;
     user: User;
     createdAt: Date;
+    files?: string;
+    audio?: string;
+    type: number;
 
     constructor(
         id: number,
@@ -14,6 +17,9 @@ export default class Message {
         group: GroupChannel,
         user: User,
         createdAt: Date | string,
+        files: string,
+        audio: string,
+        type: number
     ) {
         this.id = id
         this.content = content
@@ -21,6 +27,9 @@ export default class Message {
         this.user = user
         this.createdAt = typeof createdAt === 'string'
             ? new Date(createdAt)
-            : createdAt
+            : createdAt;
+        this.files = files
+        this.audio = audio
+        this.type = type
     }
 }
