@@ -1,11 +1,13 @@
 // src/components/MessageItem.jsx
+import { FileMessage } from "@/components/commons/file-message";
 import VideoAutoHeight from "@/components/commons/video-auto-height";
+import WaveFormPlayer from "@/components/commons/wave-form-player";
 import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
-import { IMAGE_CHAT } from "@/constants/type";
+import { FILE_CHAT, IMAGE_CHAT, VOICE_CHAT } from "@/constants/type";
 import MessageFileBody from "@/dto/common/message-file.request";
 import { Avatar } from "flowbite-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 interface MessageFileBubbleProps {
   content: string;
@@ -28,8 +30,9 @@ export default function MessageFileBubble({
   const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-200";
   const date = (typeof createdAt === 'string' ? new Date(createdAt) : createdAt);
 
+  const [, setAudioPlay] = useState(false);
+
   const files: MessageFileBody[] = JSON.parse(filesString) ?? [];
-  console.log('files', files);
 
   return (
     <div className={`flex ${alignment} gap-1`}>
@@ -44,7 +47,7 @@ export default function MessageFileBubble({
           </div>
         </div>
       }
-      <div className={`${bubbleStyle} rounded-2xl px-2 py-2 max-w-xs`}>
+      <div className={`${bubbleStyle} rounded-2xl px-2 py-2`}>
         <div className="flex flex-col gap-5">
           {
             type === IMAGE_CHAT && files.map((file, idx) => {
@@ -62,9 +65,22 @@ export default function MessageFileBubble({
               />);
             })
           }
+          {
+            type === VOICE_CHAT && files.map((file, idx) => {
+              return <WaveFormPlayer 
+                key={idx} url={API_DOMAIN + '/' + file.uri}
+                setIsPlaying={setAudioPlay}
+              />
+            })
+          }
+          {
+            type === FILE_CHAT && files.map((file, idx) => {
+              return <FileMessage key={idx} file={file} />
+            })
+          }
         </div>
-        <p className="text-sm whitespace-pre-wrap">{content}</p>
-        <span className="block text-[10px] text-gray-400 text-right mt-1">
+        <p className={"text-sm whitespace-pre-wrap " + ((content) ? 'mt-1' : '')}>{content}</p>
+        <span className={"block text-[10px] text-gray-400 text-right " + (type !== VOICE_CHAT && (!content) ? 'mt-1' : '')}>
           {date.toLocaleTimeString('en-US', {
             hour: 'numeric',    // "1"–"12"
             minute: '2-digit',    // "00"–"59"

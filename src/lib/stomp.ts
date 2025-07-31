@@ -8,6 +8,7 @@ import { useGroupChannelStore } from '@/stores/group-channel';
 import { LOGIN_ROUTE } from '@/constants/routes';
 import { useMessageStore } from '@/stores/message-store';
 import OnlineResponse from '@/dto/ws/group-channel/online';
+import IChatMessage from '@/dto/ws/message/message';
 
 let stompClient: Client | null = null
 let chatChannelSub: StompSubscription | undefined;
@@ -124,17 +125,22 @@ export function connectToChat(groupChannel: GroupChannel) {
     })
 }
 
-export function sendChatMessage(text: string, groupChannel?: GroupChannel) {
+export function sendChatMessage(type: number, message: IChatMessage, groupChannel?: GroupChannel) {
     if (!groupChannel) {
         console.error('No Channel');
         return;
     }
+    const body = {
+        content: message.text ?? '',
+        type,
+        files: ''
+    };
+    if(message.files) {
+        body.files = message.files;
+    }
     sendWSMessage(
         WS_ENDPOINTS.CHAT.PUB(groupChannel.key),
-        {
-            content: text,
-            type: 'TEXT',
-        }
+        body
     )
 }
 

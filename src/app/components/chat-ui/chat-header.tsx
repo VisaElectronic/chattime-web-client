@@ -2,7 +2,6 @@
 import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
 import { Avatar } from "flowbite-react";
 import React from "react";
-import { FiMoreHorizontal, FiSearch } from "react-icons/fi";
 
 interface ChatHeaderProps {
     title: string;
@@ -27,8 +26,8 @@ export default function ChatHeader({ title = '', avatars = [] }: ChatHeaderProps
 
             {/* (Optional) Right-side icons: search / more */}
             <div className="ml-auto flex items-center space-x-3 text-discordMuted">
-                <FiSearch className="h-5 w-5 hover:text-discordText cursor-pointer" />
-                <FiMoreHorizontal className="h-5 w-5 hover:text-discordText cursor-pointer" />
+                {/* <FiSearch className="h-5 w-5 hover:text-discordText cursor-pointer" />
+                <FiMoreHorizontal className="h-5 w-5 hover:text-discordText cursor-pointer" /> */}
             </div>
         </div>
     );

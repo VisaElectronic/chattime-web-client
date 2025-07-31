@@ -1,3 +1,4 @@
+import IChatMessage from "@/dto/ws/message/message";
 import GroupChannel from "./GroupChannel";
 import User from "./User";
 
@@ -31,5 +32,16 @@ export default class Message {
         this.files = files
         this.audio = audio
         this.type = type
+    }
+
+    static from(m: IChatMessage, user: User) {
+        const msg = {
+            id: Date.now(),
+            content: m.text,
+            user: user,
+            createdAt: new Date,
+        } as Message;
+        if(m.files) msg.audio = m.files;
+        return msg;
     }
 }

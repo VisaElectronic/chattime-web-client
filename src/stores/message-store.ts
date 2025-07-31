@@ -20,9 +20,10 @@ export const useMessageStore = create<MessageState>((set) => ({
     items: [],
     
     addItem: (item: Message) =>
-        set((state) => ({
-            items: [item, ...state.items],
-        })),
+        set((state) => {
+            // otherwise, prepend the new item
+            return { items: [item, ...state.items] };
+        }),
     
     addItems: (items: Message[]) =>
         set(() => ({

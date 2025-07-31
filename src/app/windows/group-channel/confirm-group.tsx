@@ -13,6 +13,7 @@ import { FileService } from '@/services/file.service'
 import { ContactService } from '@/services/contact.service'
 import { useGroupChannelStore } from '@/stores/group-channel'
 import { useWindowContentStore } from '@/stores/window-content'
+import { IMAGE_CHAT } from '@/constants/type'
 
 const UploadGroupProfile: React.FC<HTMLAttributes<HTMLElement>> = props => {
   return (
@@ -46,9 +47,12 @@ export default function ConfirmGroup() {
       try {
         const formData = new FormData()
         files.forEach(f => formData.append('files', f))
-        const res = await FileService.upload({files})
-        if (res) {
-          setProfilePath(res.path)
+        const res = await FileService.uploadFile({
+          files: files,
+          m_type: IMAGE_CHAT
+        })
+        if (res.success) {
+          setProfilePath(res.data[0].uri)
           setFiles([])
         } else {
           throw new Error('Upload failed')
