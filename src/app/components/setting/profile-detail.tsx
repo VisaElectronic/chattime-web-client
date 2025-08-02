@@ -14,6 +14,7 @@ import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
 import UpdateProfileDto from "@/dto/user/update-profile.request";
 import { UtilService } from "@/services/util.service";
 import { toast } from "react-toastify";
+import { disconnectStomp } from "@/lib/stomp";
 
 export default function ProfileSettings() {
   const router = useRouter();
@@ -52,6 +53,7 @@ export default function ProfileSettings() {
     try {
       await AuthService.logout();
       AuthService.removeAuthToken();
+      disconnectStomp();
       router.push(LOGIN_ROUTE); // or wherever you want to go
     } catch (err: unknown) {
       if (err instanceof Error) {

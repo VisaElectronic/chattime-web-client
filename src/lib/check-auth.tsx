@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 // Extend NextPage to include any props P
-export function CheckAuth<P extends Record<string, unknown>>(PageComponent: NextPage<P>): NextPage<P> {
+export function CheckAuth<P extends object>(PageComponent: NextPage<P>): NextPage<P> {
   const Authenticated: NextPage<P> = (props) => {
     const router = useRouter();
 

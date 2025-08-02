@@ -47,7 +47,7 @@ export default function ChatWindow() {
         setTypeWindow(CHAT_DETAIL);
     };
 
-    const handleSendFiiles = useCallback(
+    const handleSendFiles = useCallback(
         (text: string | null, files: File[], type?: number) => {
             const message: IChatMessage = {
                 text,
@@ -77,8 +77,8 @@ export default function ChatWindow() {
     );
 
     const onSendVoiceFile = useCallback((files: File[]) => {
-        handleSendFiiles(null, files, VOICE_CHAT);
-    }, [handleSendFiiles]);
+        handleSendFiles(null, files, VOICE_CHAT);
+    }, [handleSendFiles]);
 
     return (
         <div className="flex flex-col h-screen w-full">
@@ -108,7 +108,7 @@ export default function ChatWindow() {
                 type={messageType}
                 show={showSendFiles}
                 uploadFiles={uploadFiles}
-                onSend={handleSendFiiles}
+                onSend={handleSendFiles}
                 onClose={() => setShowSendFiles(false)}
             />
         </div>

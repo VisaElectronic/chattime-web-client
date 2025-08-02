@@ -32,6 +32,7 @@ export class AuthService {
     }
 
     static storeAuthToken(access_token: string) {
+        localStorage.removeItem('access_token');
         localStorage.setItem('access_token', access_token);
     }
 
