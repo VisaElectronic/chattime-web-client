@@ -1,4 +1,4 @@
 export default interface IChatMessage {
-    text: string;
+    text: string | null;
     files?: string;
 }

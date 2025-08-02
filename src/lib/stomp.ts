@@ -131,7 +131,7 @@ export function sendChatMessage(type: number, message: IChatMessage, groupChanne
         return;
     }
     const body = {
-        content: message.text ?? '',
+        content: message.text ?? null,
         type,
         files: ''
     };

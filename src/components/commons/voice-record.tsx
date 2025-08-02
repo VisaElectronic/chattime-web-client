@@ -1,63 +1,121 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { FiMic } from 'react-icons/fi';
+import GestureComponent from './gesture';
 
-export default function VoiceRecorder() {
+interface VoiceRecorderProps {
+    onSendVoiceFile: (files: File[]) => void;
+    setMessageType: () => void
+}
+
+export default function VoiceRecorder({
+    onSendVoiceFile,
+    setMessageType
+}: VoiceRecorderProps) {
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
     const chunksRef = useRef<Blob[]>([]);
-    const [audioURL, setAudioURL] = useState('');
+    const [, setAudioURL] = useState('');
+    const [, setFiles] = useState<File[]>([]);
     const [isRecording, setIsRecording] = useState(false);
+    const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
-    // initialize MediaRecorder once on mount
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        navigator.mediaDevices
-            .getUserMedia({ audio: true })
-            .then(stream => {
-                const mr = new MediaRecorder(stream);
-                mr.ondataavailable = e => chunksRef.current.push(e.data);
-                mr.onstop = () => {
-                    const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-                    setAudioURL(URL.createObjectURL(blob));
-                };
-                setMediaRecorder(mr);
-            })
-            .catch(err => console.error('Mic access denied:', err));
-        // cleanup on unmount
-        return () => {
-            mediaRecorder?.stream?.getTracks().forEach(t => t.stop());
-        };
-    }, [mediaRecorder?.stream]);
-
-    const start = () => {
-        chunksRef.current = [];
-        setAudioURL('');
-        mediaRecorder?.start();
-        setIsRecording(true);
+    const requestMediaPermission = async () => {
+        try {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                console.error('getUserMedia is not supported in your browser.');
+                setHasPermission(false);
+                return;
+            }
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+            setHasPermission(true);
+            return;
+        } catch (err) {
+            console.log('err', err);
+            if (err instanceof DOMException) {
+                if (err.name === 'NotAllowedError') {
+                    setHasPermission(false);
+                }
+            } else {
+                console.error(`An unknown error occurred: ${String(err)}`);
+                setHasPermission(false);
+            }
+            return;
+        }
     };
 
-    const stop = () => {
-        mediaRecorder?.stop();
-        setIsRecording(false);
+    const startRecord = async () => {
+        if (!hasPermission) {
+            alert('Permission denied. Please grant access to your microphone.');
+            return;
+        }
+        chunksRef.current = [];
+        setAudioURL('');
+
+        setIsRecording(true);
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+
+        const chunks: BlobPart[] = [];
+
+        recorder.ondataavailable = (event) => {
+            chunks.push(event.data);
+        };
+
+        recorder.onstop = () => {
+            const file = new File(chunks, window.crypto.randomUUID() + '.webm', { type: 'audio/webm' });
+            const url = URL.createObjectURL(file) + '.webm';
+            setAudioURL(url);
+            setIsRecording(false);
+
+            setAudioURL(url);
+            setFiles([file]);
+
+            console.log('send ' + url + ' file to server');
+
+            onSendVoiceFile([file]);
+            reset();
+        };
+
+        recorder.start();
+        setMediaRecorder(recorder);
+    };
+
+    const stopRecording = () => {
+        setMessageType();
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+            mediaRecorder.stream.getTracks().forEach((track) => track.stop());
+            setIsRecording(false);
+        }
     };
 
     const reset = () => {
+        setIsRecording(false);
         setAudioURL('');
         chunksRef.current = [];
     };
 
+    useEffect(() => {
+        requestMediaPermission();
+    }, []);
+
     return (
         <div className="space-y-4">
-            {!isRecording
-                ? <button onClick={start}>🎙️ Start Recording</button>
-                : <button onClick={stop}>⏹️ Stop Recording</button>
-            }
-
-            {audioURL && (
-                <div className="space-x-2">
-                    <audio src={audioURL} controls />
-                    <button onClick={reset}>🔄 Re-record</button>
-                </div>
-            )}
+            <GestureComponent
+                onHold={startRecord}
+                onLeave={stopRecording}
+                onCancel={reset}
+            >
+                {
+                    !isRecording ? <FiMic className="" size={35} /> :
+                        <>
+                            <FiMic className="" size={35} />
+                            <div className="p-4 rounded-full border-2 flex bg-primary-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <FiMic className="" size={35} />
+                            </div>
+                        </>
+                }
+            </GestureComponent>
         </div>
     );
 }

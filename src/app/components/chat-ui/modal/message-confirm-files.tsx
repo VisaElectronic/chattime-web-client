@@ -59,7 +59,7 @@ export default function MessageConfirmFiles({
                                         className="flex items-center p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                                     >
                                         <span className="mr-3 text-gray-500 dark:text-gray-400">
-                                            {file.name ? <FileIcon name={file.name} size={file.size ?? 24} /> : ''}
+                                            {file.name ? <FileIcon name={file.name} size={24} /> : ''}
                                         </span>
                                         <div className="flex-grow">
                                             <p className="font-medium text-gray-900 dark:text-gray-100">
@@ -90,7 +90,10 @@ export default function MessageConfirmFiles({
                     <button
                         className="px-2 text-blue-500"
                         disabled={text.trim().length === 0}
-                        onClick={() => onSend(text.trim(), uploadFiles)}
+                        onClick={() => {
+                            setText('');
+                            onSend(text.trim(), uploadFiles)
+                        }}
                     >
                         <FiSend
                             className={`${text.trim() ? "text-blue-400" : "text-discordMuted"}`}

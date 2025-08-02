@@ -8,20 +8,16 @@ import { sendChatMessage } from "@/lib/stomp";
 import { useGroupChannelStore } from "@/stores/group-channel";
 import { useWindowContentStore } from "@/stores/window-content";
 import { CHAT_DETAIL } from "@/constants/window";
-import { TEXT_CHAT } from "@/constants/type";
+import { TEXT_CHAT, VOICE_CHAT } from "@/constants/type";
 import { FileService } from "@/services/file.service";
 import IChatMessage from "@/dto/ws/message/message";
 import MessageConfirmFiles from "./modal/message-confirm-files";
-import Message from "@/models/Message";
-import { useUserStore } from "@/stores/profile";
 import FileBody from "@/dto/common/fiile.request";
 
 export default function ChatWindow() {
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
-    const currentUser = useUserStore((state) => state.item);
     const selectedGroupChannel = useGroupChannelStore((state) => state.selectedGroupChannel);
     const messages = useMessageStore((state) => state.items);
-    const addMessage = useMessageStore((state) => state.addItem);
     const [profile, setProfile] = useState('');
     const [fullname, setFullname] = useState('');
     const [messageType, setMessageType] = useState(TEXT_CHAT);
@@ -42,10 +38,9 @@ export default function ChatWindow() {
             const message: IChatMessage = {
                 text,
             }
-            addMessage(Message.from(message, currentUser!));
             sendChatMessage(TEXT_CHAT, message, selectedGroupChannel);
         },
-        [addMessage, currentUser, selectedGroupChannel]
+        [selectedGroupChannel]
     );
 
     const goDetail = () => {
@@ -53,7 +48,7 @@ export default function ChatWindow() {
     };
 
     const handleSendFiiles = useCallback(
-        (text: string, files: File[]) => {
+        (text: string | null, files: File[], type?: number) => {
             const message: IChatMessage = {
                 text,
                 files: files && files.length > 0 ? JSON.stringify(files.map(f => {
@@ -65,13 +60,12 @@ export default function ChatWindow() {
                     return file;
                 })) : ''
             }
-            addMessage(Message.from(message, currentUser!));
             FileService.uploadFile({
                 files: files,
-                m_type: messageType
+                m_type: type ? type : messageType
             }).then(res => {
                 message.files = res.data && res.data.length > 0 ? JSON.stringify(res.data) : ''
-                sendChatMessage(messageType, message, selectedGroupChannel);
+                sendChatMessage(type ? type : messageType, message, selectedGroupChannel);
                 setUploadFiles([]);
             }).catch(e => {
                 console.error(e);
@@ -79,8 +73,12 @@ export default function ChatWindow() {
                 setShowSendFiles(false);
             })
         },
-        [addMessage, currentUser, messageType, selectedGroupChannel]
+        [messageType, selectedGroupChannel]
     );
+
+    const onSendVoiceFile = useCallback((files: File[]) => {
+        handleSendFiiles(null, files, VOICE_CHAT);
+    }, [handleSendFiiles]);
 
     return (
         <div className="flex flex-col h-screen w-full">
@@ -103,6 +101,7 @@ export default function ChatWindow() {
                     setSelectedFiles={setUploadFiles}
                     setMessageType={setMessageType}
                     setShowSendFiles={setShowSendFiles}
+                    onSendVoiceFile={onSendVoiceFile}
                 />
             </div>
             <MessageConfirmFiles

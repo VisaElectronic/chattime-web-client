@@ -30,8 +30,10 @@ export default function MessageList({messages}: MessageListProp) {
               filesString={msg.files ? msg.files : (msg.audio ?? '[]')}
               type={msg.type}
             />;
+          } else if(msg.type === TEXT_CHAT) {
+            return <MessageBubble key={msg.id} {...msg} isCurrentUser={isCurrentUser}  avatar={msg.user.avatar} />;
           }
-          return <MessageBubble key={msg.id} {...msg} isCurrentUser={isCurrentUser}  avatar={msg.user.avatar} />;
+          return <></>;
         })}
       </div>
       {/* sentinel element to scroll into view */}

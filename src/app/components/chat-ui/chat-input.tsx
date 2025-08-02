@@ -1,9 +1,10 @@
 // src/components/ChatInput.jsx
-import { FILE_CHAT, IMAGE_CHAT } from "@/constants/type";
+import VoiceRecorder from "@/components/commons/voice-record";
+import { FILE_CHAT, IMAGE_CHAT, VOICE_CHAT } from "@/constants/type";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { FaPaperclip } from "react-icons/fa";
-import { FiSmile, FiSend, FiMic, FiFile } from "react-icons/fi";
+import { FiSend, FiFile } from "react-icons/fi";
 import { HiOutlinePhotograph } from "react-icons/hi";
 
 interface ChatInputProp {
@@ -11,18 +12,21 @@ interface ChatInputProp {
     setSelectedFiles: (files: File[]) => void
     setMessageType: (type: number) => void
     setShowSendFiles: (show: boolean) => void
+    onSendVoiceFile: (files: File[]) => void;
 }
 
 export default function ChatInput({ 
     onSend,
     setSelectedFiles,
     setMessageType,
-    setShowSendFiles
+    setShowSendFiles,
+    onSendVoiceFile
  }: ChatInputProp) {
     const [text, setText] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [accept, setAccept] = useState<null | string>(null);
-    const [chooseFiles, setChooseFiles] = useState<boolean>(false);
+    const [openChooseFiles, setOpenChooseFiles] = useState<boolean>(false);
+    const [, setChoseFiles] = useState<boolean>(false);
 
     const handleSend = () => {
         const trimmed = text.trim();
@@ -47,14 +51,14 @@ export default function ChatInput({
             setAccept('*/*');
             setMessageType(FILE_CHAT);
         }
-        setChooseFiles(true);
+        setOpenChooseFiles(true);
     };
 
     useEffect(() => {
-        if(!chooseFiles) return;
+        if(!openChooseFiles) return;
         inputRef.current?.click();
-        setChooseFiles(false);
-    }, [chooseFiles])
+        setOpenChooseFiles(false);
+    }, [openChooseFiles])
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -64,7 +68,7 @@ export default function ChatInput({
         }
         setSelectedFiles(files)
         setShowSendFiles(true);
-        // setSelectedFiles(e.target.files);
+        setChoseFiles(true);
         // reset so selecting the same file twice still fires change
         e.target.value = '';
     };
@@ -118,22 +122,30 @@ export default function ChatInput({
                 />
 
                 <div className="flex items-center space-x-2">
-                    <button
-                        className="px-2 text-discordMuted hover:text-discordText"
-                        disabled={text.trim().length === 0}
-                        onClick={() => onSend(text.trim())}
-                    >
-                        <FiSend
-                            className={`${text.trim() ? "text-blue-400" : "text-discordMuted"}`}
-                            size={35}
+                    {
+                        (text) &&
+                        <button
+                            className="px-2 text-discordMuted hover:text-discordText"
+                            disabled={text.trim().length === 0}
+                            onClick={() => {
+                                setChoseFiles(false);
+                                setText("");
+                                onSend(text.trim())
+                            }}
+                        >
+                            <FiSend
+                                className={`${text.trim() ? "text-blue-400" : "text-discordMuted"}`}
+                                size={35}
+                            />
+                        </button>
+                    }
+                    {
+                        !text &&
+                        <VoiceRecorder
+                            onSendVoiceFile={onSendVoiceFile}
+                            setMessageType={() => setMessageType(VOICE_CHAT)}
                         />
-                    </button>
-                    <button className="px-2 text-discordMuted hover:text-discordText">
-                        <FiSmile className="" size={35} />
-                    </button>
-                    <button className="px-2 text-discordMuted hover:text-discordText">
-                        <FiMic className="" size={35} />
-                    </button>
+                    }
                 </div>
             </div>
         </div>
