@@ -51,6 +51,7 @@ export default function ChatWindow() {
 
     const handleSendFiles = useCallback(
         (text: string | null, files: File[], type?: number) => {
+            setLoading(true);
             const message: IChatMessage = {
                 text,
                 files: files && files.length > 0 ? JSON.stringify(files.map(f => {
@@ -80,7 +81,6 @@ export default function ChatWindow() {
     );
 
     const onSendVoiceFile = useCallback((files: File[]) => {
-        setLoading(true);
         handleSendFiles(null, files, VOICE_CHAT);
     }, [handleSendFiles]);
 
