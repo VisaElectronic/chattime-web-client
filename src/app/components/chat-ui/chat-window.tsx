@@ -13,6 +13,7 @@ import { FileService } from "@/services/file.service";
 import IChatMessage from "@/dto/ws/message/message";
 import MessageConfirmFiles from "./modal/message-confirm-files";
 import FileBody from "@/dto/common/fiile.request";
+import Loading from "@/components/commons/loading";
 
 export default function ChatWindow() {
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
@@ -23,6 +24,7 @@ export default function ChatWindow() {
     const [messageType, setMessageType] = useState(TEXT_CHAT);
     const [uploadFiles, setUploadFiles] = useState<File[]>([]);
     const [showSendFiles, setShowSendFiles] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (selectedGroupChannel) {
@@ -71,46 +73,51 @@ export default function ChatWindow() {
                 console.error(e);
             }).finally(() => {
                 setShowSendFiles(false);
+                setLoading(false);
             })
         },
         [messageType, selectedGroupChannel]
     );
 
     const onSendVoiceFile = useCallback((files: File[]) => {
+        setLoading(true);
         handleSendFiles(null, files, VOICE_CHAT);
     }, [handleSendFiles]);
 
     return (
-        <div className="flex flex-col h-screen w-full">
-            {/* 1. Header — fixed height */}
-            <div className="flex-none cursor-pointer" onClick={goDetail}>
-                <ChatHeader title={fullname} avatars={[profile]} />
-            </div>
+        <>
+            {loading && <Loading />}
+            <div className="flex flex-col h-screen w-full">
+                {/* 1. Header — fixed height */}
+                <div className="flex-none cursor-pointer" onClick={goDetail}>
+                    <ChatHeader title={fullname} avatars={[profile]} />
+                </div>
 
-            {/* 2. Message List — flex & scroll */}
-            <div className="flex-1 overflow-y-auto bg-gray-900">
-                <MessageList
-                    messages={messages}
+                {/* 2. Message List — flex & scroll */}
+                <div className="flex-1 overflow-y-auto bg-gray-900">
+                    <MessageList
+                        messages={messages}
+                    />
+                </div>
+
+                {/* 3. Input — fixed height */}
+                <div className="flex-none">
+                    <ChatInput
+                        onSend={handleSend}
+                        setSelectedFiles={setUploadFiles}
+                        setMessageType={setMessageType}
+                        setShowSendFiles={setShowSendFiles}
+                        onSendVoiceFile={onSendVoiceFile}
+                    />
+                </div>
+                <MessageConfirmFiles
+                    type={messageType}
+                    show={showSendFiles}
+                    uploadFiles={uploadFiles}
+                    onSend={handleSendFiles}
+                    onClose={() => setShowSendFiles(false)}
                 />
             </div>
-
-            {/* 3. Input — fixed height */}
-            <div className="flex-none">
-                <ChatInput
-                    onSend={handleSend}
-                    setSelectedFiles={setUploadFiles}
-                    setMessageType={setMessageType}
-                    setShowSendFiles={setShowSendFiles}
-                    onSendVoiceFile={onSendVoiceFile}
-                />
-            </div>
-            <MessageConfirmFiles
-                type={messageType}
-                show={showSendFiles}
-                uploadFiles={uploadFiles}
-                onSend={handleSendFiles}
-                onClose={() => setShowSendFiles(false)}
-            />
-        </div>
+        </>
     );
 }
