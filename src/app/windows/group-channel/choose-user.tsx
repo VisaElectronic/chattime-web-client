@@ -6,7 +6,7 @@ import { useWindowContentStore } from '@/stores/window-content'
 import { CREATE_GROUP_CONFIRM, EMPTY_WINDOW } from '@/constants/window'
 import { ContactService } from '@/services/contact.service'
 import Channel from '@/models/Channel'
-import { API_DOMAIN } from '@/constants/api'
+import { API_DOMAIN, DEFAULT_DATA } from '@/constants/api'
 import { useSearchContactStore } from '@/stores/search-contact'
 import BackButton from '@/app/components/setting/back-button'
 
@@ -93,7 +93,7 @@ export default function ChooseUser() {
                         >
                             <div className="flex items-center">
                                 <Avatar
-                                    img={API_DOMAIN + '/' + channel.user.avatar}
+                                    img={API_DOMAIN + '/' + (channel.user ? channel.user.avatar : DEFAULT_DATA.PROFILE)}
                                     rounded
                                     size="md"
                                 />

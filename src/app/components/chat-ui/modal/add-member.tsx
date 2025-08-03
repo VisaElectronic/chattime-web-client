@@ -6,7 +6,7 @@ import { GroupService } from "@/services/group.service";
 import { useGroupChannelStore } from "@/stores/group-channel";
 import { NOT_GROUP_MEMBERS } from "@/constants/type";
 import Channel from "@/models/Channel";
-import { API_DOMAIN } from "@/constants/api";
+import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
 import ConfirmAddMember from "./confirm-member";
 
 interface AddMemberModalProps {
@@ -105,7 +105,7 @@ const AddMemberModal: FC<AddMemberModalProps> = ({
                   }}
                 >
                   <div className="flex items-center space-x-4">
-                    <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
+                    <Avatar img={API_DOMAIN + '/' + (channel.user ? channel.user.avatar : DEFAULT_DATA.PROFILE)} rounded />
                     <div>
                       <h6 className="text-white text-sm">{channel.user.firstname + ' ' + channel.user.lastname}</h6>
                     </div>
