@@ -44,5 +44,5 @@ export const ENDPOINTS = {
 };
 
 export const DEFAULT_DATA = {
-    PROFILE: `/uploads/default-user.png`,  
+    PROFILE: `uploads/default-user.png`,  
 };

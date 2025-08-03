@@ -1,4 +1,4 @@
-import { API_DOMAIN } from "@/constants/api";
+import { API_DOMAIN, DEFAULT_DATA } from "@/constants/api";
 import { CHAT_WINDOW } from "@/constants/window";
 import { connectToChatChannel } from "@/lib/stomp";
 import Channel from "@/models/Channel";
@@ -29,7 +29,7 @@ export default function SideBarChat({ groupChannel }: SideBarChatProps) {
             <div className="flex items-center p-3">
                 <div className="shrink-0">
                     <Avatar
-                        img={API_DOMAIN + '/' + (profile ? profile : '/uploads/default-user.png')}
+                        img={API_DOMAIN + '/' + (profile ? profile : DEFAULT_DATA.PROFILE)}
                         rounded
                     />
                 </div>
