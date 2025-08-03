@@ -37,7 +37,7 @@ export default function MessageFileBubble({
   return (
     <div className={`flex ${alignment} gap-1`}>
       {
-        !isCurrentUser && avatar &&
+        !isCurrentUser &&
         <div className="flex flex-col justify-end">
           <div>
             <Avatar
@@ -89,7 +89,7 @@ export default function MessageFileBubble({
         </span>
       </div>
       {
-        isCurrentUser && avatar &&
+        isCurrentUser &&
         <div className="flex flex-col justify-end">
           <div>
             <Avatar

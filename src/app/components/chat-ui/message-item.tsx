@@ -18,7 +18,7 @@ export default function MessageBubble({ content, isCurrentUser, createdAt, avata
   return (
     <div className={`flex ${alignment} gap-1`}>
       {
-        !isCurrentUser && avatar &&
+        !isCurrentUser &&
         <div className="flex flex-col justify-end">
           <div>
             <Avatar
@@ -39,7 +39,7 @@ export default function MessageBubble({ content, isCurrentUser, createdAt, avata
         </span>
       </div>
       {
-        isCurrentUser && avatar &&
+        isCurrentUser &&
         <div className="flex flex-col justify-end">
           <div>
             <Avatar

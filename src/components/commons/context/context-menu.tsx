@@ -1,5 +1,5 @@
 // components/ContextMenu.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 
 export interface ContextMenuItem {
   /** The text to show in the menu */
@@ -16,9 +16,18 @@ export interface ContextMenuProps {
   /** The element(s) that will listen for right-clicks */
   children: React.ReactNode;
   currentChildKey: string;
+  setSelectContextMenu: Dispatch<SetStateAction<string | null>>
+  selectContextMenu: string | null
 }
 
-export const ContextMenu: React.FC<ContextMenuProps> = ({ className, items, children, currentChildKey }) => {
+export const ContextMenu: React.FC<ContextMenuProps> = ({
+  className,
+  items,
+  children,
+  currentChildKey,
+  setSelectContextMenu,
+  selectContextMenu
+}) => {
   const [visible, setVisible] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const menuRef = useRef<HTMLUListElement>(null);
@@ -27,7 +36,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ className, items, chil
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     setPos({ x: e.pageX, y: e.pageY });
-    setVisible(true);
+    setSelectContextMenu(currentChildKey);
   };
 
   // hide on outside click or ESC
@@ -58,6 +67,14 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ className, items, chil
     }
   }, [visible]);
 
+  useEffect(() => {
+    if (currentChildKey === selectContextMenu) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  }, [currentChildKey, selectContextMenu]);
+
   return (
     <div onContextMenu={handleContextMenu} className={className}>
       {children}
@@ -73,7 +90,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ className, items, chil
               key={idx}
               className={
                 item.labelColor ? "px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer " + item.labelColor
-                : "px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                  : "px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
               }
               onClick={() => {
                 item.onClick(currentChildKey);

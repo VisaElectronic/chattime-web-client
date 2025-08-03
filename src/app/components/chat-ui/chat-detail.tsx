@@ -21,6 +21,7 @@ export default function ChatDetailScreen() {
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     const selectedGroupChannel = useGroupChannelStore((state) => state.selectedGroupChannel)!;
     const [showAddMember, setShowAddMember] = useState(false);
+    const [selectContextMenu, setSelectContextMenu] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const chatName = selectedGroupChannel?.name ?? '';
     const chatPhoto = selectedGroupChannel?.group ? selectedGroupChannel.photo : selectedGroupChannel?.channel.user.avatar;
@@ -145,12 +146,28 @@ export default function ChatDetailScreen() {
                         <Tabs aria-label="Info tabs" className='gap-0 p-0'>
                             <TabItem active title="Members" className='p-0'>
                                 <List className='p-0 divide-y divide-gray-200 dark:divide-gray-700'>
-                                    {members.map((member) => (
-                                        <ContextMenu
+                                    {members.map((member) => {
+                                        if(member.role == ADMIN_ROLE_TYPE) {
+                                            return <ListItem 
+                                                    key={member.key}
+                                                    className="flex items-center justify-between px-4 py-1 hover:bg-gray-700 cursor-pointer"
+                                                >
+                                                <div className="flex items-center space-x-4">
+                                                    <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
+                                                    <div>
+                                                        <h6 className="text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
+                                                    </div>
+                                                </div>
+                                                {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}
+                                            </ListItem>;
+                                        }
+                                        return <ContextMenu
                                             className="flex flex-col"
                                             items={contextMenuItems}
                                             key={member.key}
                                             currentChildKey={member.key}
+                                            setSelectContextMenu={setSelectContextMenu}
+                                            selectContextMenu={selectContextMenu}
                                         >
                                             <ListItem className="flex items-center justify-between px-4 py-1 hover:bg-gray-700 cursor-pointer">
                                                 <div className="flex items-center space-x-4">
@@ -161,8 +178,8 @@ export default function ChatDetailScreen() {
                                                 </div>
                                                 {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}
                                             </ListItem>
-                                        </ContextMenu>
-                                    ))}
+                                        </ContextMenu>;
+                                    })}
                                 </List>
                             </TabItem>
                         </Tabs>
