@@ -108,7 +108,7 @@ export default function ConfirmGroup() {
                   key={channel.id}
                   className={`flex items-center p-4 space-x-4 border-t border-gray-700`}
                 >
-                  <Avatar img={API_DOMAIN + '/' + (channel.user ? channel.user.avatar : DEFAULT_DATA.PROFILE)} rounded size="md" />
+                  <Avatar img={API_DOMAIN + '/' + (channel.user.avatar ? channel.user.avatar : DEFAULT_DATA.PROFILE)} rounded size="md" />
                   <div>
                     <p className="font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
                     <p className="text-xs text-blue-400">@{channel.user.username}</p>

@@ -105,7 +105,7 @@ const AddMemberModal: FC<AddMemberModalProps> = ({
                   }}
                 >
                   <div className="flex items-center space-x-4">
-                    <Avatar img={API_DOMAIN + '/' + (channel.user ? channel.user.avatar : DEFAULT_DATA.PROFILE)} rounded />
+                    <Avatar img={API_DOMAIN + '/' + (channel.user.avatar ? channel.user.avatar : DEFAULT_DATA.PROFILE)} rounded />
                     <div>
                       <h6 className="text-white text-sm">{channel.user.firstname + ' ' + channel.user.lastname}</h6>
                     </div>

@@ -93,7 +93,7 @@ export default function ChooseUser() {
                         >
                             <div className="flex items-center">
                                 <Avatar
-                                    img={API_DOMAIN + '/' + (channel.user ? channel.user.avatar : DEFAULT_DATA.PROFILE)}
+                                    img={API_DOMAIN + '/' + (channel.user.avatar ? channel.user.avatar : DEFAULT_DATA.PROFILE)}
                                     rounded
                                     size="md"
                                 />
