@@ -64,8 +64,8 @@ export default function ConfirmGroup() {
   return (
     <>
       {loading && <Loading />}
-      <div className='w-full px-5 bg-gray-900'>
-        <div className="min-h-screen text-white">
+      <div className='w-full px-5 dark:bg-gray-900'>
+        <div className="min-h-screen dark:text-white">
           {/* Header */}
           <header className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
             <BackButton typeWindow={CREATE_GROUP_CHOOSE_USER} />
@@ -81,7 +81,7 @@ export default function ConfirmGroup() {
 
           <main className="p-4 space-y-4">
             {/* Group name & avatar */}
-            <div className="bg-gray-800 rounded-lg flex items-center p-4 space-x-4">
+            <div className="dark:bg-gray-800 rounded-lg flex items-center p-4 space-x-4">
               <Dropzone 
                 onFiles={handleFiles}
               >
@@ -91,13 +91,13 @@ export default function ConfirmGroup() {
                 placeholder="Group Name"
                 value={groupName}
                 onChange={e => setGroupName(e.target.value)}
-                className="bg-gray-800 border-0 focus:ring-0 text-white placeholder-gray-500 text-lg"
+                className="dark:bg-gray-800 border-0 focus:ring-0 text-white placeholder-gray-500 text-lg"
               />
             </div>
 
             {/* Members section */}
-            <div className="bg-gray-800 rounded-lg overflow-hidden">
-              {/* <a className="flex items-center p-4 space-x-2 hover:bg-gray-700">
+            <div className="dark:bg-gray-800 rounded-lg overflow-hidden">
+              {/* <a className="flex items-center p-4 space-x-2 dark:hover:bg-gray-700">
                 <HiUserAdd className="w-6 h-6 text-blue-400" />
                 <span className="text-blue-400 font-medium">Add Members</span>
               </a> */}
@@ -111,7 +111,7 @@ export default function ConfirmGroup() {
                   <Avatar img={API_DOMAIN + '/' + (channel.user.avatar ? channel.user.avatar : DEFAULT_DATA.PROFILE)} rounded size="md" />
                   <div>
                     <p className="font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
-                    <p className="text-xs text-blue-400">@{channel.user.username}</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400">@{channel.user.username}</p>
                   </div>
                 </div>
               ))}

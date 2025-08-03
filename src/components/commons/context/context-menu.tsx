@@ -82,7 +82,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       {visible && (
         <ul
           ref={menuRef}
-          className="fixed bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-md"
+          className="fixed bg-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-md"
           style={{ top: pos.y, left: pos.x, minWidth: '8rem', zIndex: 1000 }}
         >
           {items.map((item, idx) => (

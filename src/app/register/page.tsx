@@ -45,7 +45,7 @@ export default function LoginPage() {
   return (
     <div>
       {loading && <Loading />}
-      <div className="min-h-screen bg-gray-900 text-white grid md:grid-cols-2">
+      <div className="min-h-screen dakr:bg-gray-900 text-white grid md:grid-cols-2">
         {/* — Left side: features list — */}
         <div className="p-12 flex flex-col justify-center space-y-8">
           <div className="flex items-center space-x-3">
@@ -88,7 +88,7 @@ export default function LoginPage() {
 
         {/* — Right side: login form — */}
         <div className="flex items-center justify-center p-12">
-          <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
+          <div className="w-full max-w-md dark:bg-gray-800 p-8 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-6 text-white">Create your Free Account</h2>
 
             {/* <div className="flex space-x-4 mb-6">

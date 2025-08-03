@@ -108,7 +108,7 @@ export default function Sidebar() {
             const isActive = idx === active;
             return (
               <div key={idx} onClick={() => setActive(idx)}>
-                <Icon className={isActive ? "text-white" : "text-gray-600"} size={35} />
+                <Icon className={isActive ? "dark:text-white" : "text-gray-400"} size={35} />
               </div>
             );
           })}

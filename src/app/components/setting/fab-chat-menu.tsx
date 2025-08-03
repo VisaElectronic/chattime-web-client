@@ -15,7 +15,7 @@ export default function FabChatMenu() {
                 arrowIcon={false}
                 inline
                 label={
-                    <HiPencilAlt className="w-6 h-6 text-white" />
+                    <HiPencilAlt className="w-6 h-6 dark:text-white" />
                 }
             >
                 <DropdownItem icon={HiUserGroup} onClick={() => setTypeWindow(CREATE_GROUP_CHOOSE_USER)}>

@@ -29,7 +29,7 @@ export default function MessageConfirmFiles({
             popup
             onClose={onClose}
         >
-            <ModalBody className="bg-gray-800 rounded-lg flex flex-col gap-4 p-4">
+            <ModalBody className="dark:bg-gray-800 rounded-lg flex flex-col gap-4 p-4">
                 <div className="flex justify-between flex-[3_1_0%]">
                     <button
                         onClick={onClose}

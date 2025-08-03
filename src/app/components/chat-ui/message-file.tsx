@@ -27,7 +27,7 @@ export default function MessageFileBubble({
   type
 }: MessageFileBubbleProps) {
   const alignment = isCurrentUser ? "justify-end" : "justify-start";
-  const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-200";
+  const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-800 dark:text-gray-200";
   const date = (typeof createdAt === 'string' ? new Date(createdAt) : createdAt);
 
   const [, setAudioPlay] = useState(false);
@@ -80,7 +80,7 @@ export default function MessageFileBubble({
           }
         </div>
         <p className={"text-sm whitespace-pre-wrap " + ((content) ? 'mt-1' : '')}>{content}</p>
-        <span className={"block text-[10px] text-gray-400 text-right " + (type !== VOICE_CHAT && (!content) ? 'mt-1' : '')}>
+        <span className={"block text-[10px] dark:text-gray-400 text-right " + (type !== VOICE_CHAT && (!content) ? 'mt-1' : '')}>
           {date.toLocaleTimeString('en-US', {
             hour: 'numeric',    // "1"–"12"
             minute: '2-digit',    // "00"–"59"

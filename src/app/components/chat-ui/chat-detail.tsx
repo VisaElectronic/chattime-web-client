@@ -92,7 +92,7 @@ export default function ChatDetailScreen() {
     return (
         <>
             {loading && <Loading />}
-            <div className="min-h-screen bg-gray-900 text-white w-full">
+            <div className="min-h-screen dark:bg-gray-900 dark:text-white w-full">
                 {/* Header */}
                 <header className="flex items-center p-3 justify-between border-b-[0.01px] dark:border-b-[#656565] sticky top-0 w-full dark:bg-gray-800">
                     <div
@@ -142,7 +142,7 @@ export default function ChatDetailScreen() {
                     </div>
 
                     {/* Members List */}
-                    <div className="max-w-md mx-auto bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                    <div className="max-w-md mx-auto dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
                         <Tabs aria-label="Info tabs" className='gap-0 p-0'>
                             <TabItem active title="Members" className='p-0'>
                                 <List className='p-0 divide-y divide-gray-200 dark:divide-gray-700'>
@@ -150,7 +150,7 @@ export default function ChatDetailScreen() {
                                         if(member.role == ADMIN_ROLE_TYPE) {
                                             return <ListItem 
                                                     key={member.key}
-                                                    className="flex items-center justify-between px-4 py-1 hover:bg-gray-700 cursor-pointer"
+                                                    className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer"
                                                 >
                                                 <div className="flex items-center space-x-4">
                                                     <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
@@ -169,11 +169,11 @@ export default function ChatDetailScreen() {
                                             setSelectContextMenu={setSelectContextMenu}
                                             selectContextMenu={selectContextMenu}
                                         >
-                                            <ListItem className="flex items-center justify-between px-4 py-1 hover:bg-gray-700 cursor-pointer">
+                                            <ListItem className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer">
                                                 <div className="flex items-center space-x-4">
                                                     <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
                                                     <div>
-                                                        <h6 className="text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
+                                                        <h6 className="dark:text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
                                                     </div>
                                                 </div>
                                                 {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}

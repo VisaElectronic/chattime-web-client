@@ -89,12 +89,12 @@ export default function ChatWindow() {
             {loading && <Loading />}
             <div className="flex flex-col h-screen w-full">
                 {/* 1. Header — fixed height */}
-                <div className="flex-none cursor-pointer" onClick={goDetail}>
-                    <ChatHeader title={fullname} avatars={[profile]} />
+                <div className="flex-none cursor-pointer">
+                    <ChatHeader title={fullname} avatars={[profile]} goDetail={goDetail}/>
                 </div>
 
                 {/* 2. Message List — flex & scroll */}
-                <div className="flex-1 overflow-y-auto bg-gray-900">
+                <div className="flex-1 overflow-y-auto dark:bg-gray-900">
                     <MessageList
                         messages={messages}
                     />

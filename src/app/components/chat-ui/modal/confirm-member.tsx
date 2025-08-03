@@ -26,13 +26,13 @@ const ConfirmAddMember: FC<ConfirmAddMemberProps> = ({
       onClose={onClose}
     >
       {/* body with your dark card */}
-      <ModalBody className="bg-gray-800 rounded-lg flex flex-col gap-4 p-4">
+      <ModalBody className="dark:bg-gray-800 rounded-lg flex flex-col gap-4 p-4">
         <button
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-4 left-4 focus:outline-none"
+          className="absolute top-4 left-4 focus:outline-none cursor-pointer"
         >
-          <FiXCircle className="w-8 h-8 text-blue-400 hover:text-blue-300" />
+          <FiXCircle className="w-8 h-8 text-blue-600 dark:text-blue-400 hover:text-blue-300" />
         </button>
         <h3 className="text-xl font-semibold text-white text-center">
           Confirm

@@ -12,7 +12,7 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ content, isCurrentUser, createdAt, avatar }: MessageBubbleProps) {
   const alignment = isCurrentUser ? "justify-end" : "justify-start";
-  const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-200";
+  const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-800 dark:text-gray-200";
   const date = (typeof createdAt === 'string' ? new Date(createdAt) : createdAt);
 
   return (
@@ -30,7 +30,7 @@ export default function MessageBubble({ content, isCurrentUser, createdAt, avata
       }
       <div className={`${bubbleStyle} rounded-2xl px-4 py-2 max-w-xs`}>  
         <p className="text-sm whitespace-pre-wrap">{content}</p>
-        <span className="block text-[10px] text-gray-400 text-right mt-1">
+        <span className="block text-[10px] dark:text-gray-400 text-right mt-1">
           {date.toLocaleTimeString('en-US', {
             hour:   'numeric',    // "1"–"12"
             minute: '2-digit',    // "00"–"59"

@@ -65,7 +65,7 @@ export default function ChatDetailEditScreen() {
     return (
         <>
             {loading && <Loading />}
-            <div className="min-h-screen bg-gray-900 text-white w-full">
+            <div className="min-h-screen dark:bg-gray-900 text-white w-full">
                 {/* Header */}
                 <header className="flex items-center p-3 justify-between border-b-[0.01px] dark:border-b-[#656565] sticky top-0 w-full dark:bg-gray-800">
                     <div

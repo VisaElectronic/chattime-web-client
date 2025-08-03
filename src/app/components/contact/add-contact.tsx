@@ -35,7 +35,7 @@ const AddContactModal: FC<AddContactModalProps> = ({
       onClose={onClose}
     >
       {/* body with your dark card */}
-      <ModalBody className="bg-gray-800 rounded-lg flex flex-col gap-4 p-4">
+      <ModalBody className="dark:bg-gray-800 rounded-lg flex flex-col gap-4 p-4">
         <button
             onClick={onClose}
             aria-label="Close modal"

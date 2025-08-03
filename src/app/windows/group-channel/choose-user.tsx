@@ -17,6 +17,7 @@ export default function ChooseUser() {
     const selectedContact = useSearchContactStore(state => state.selectedContact);
     const selected_contacts = useSearchContactStore(state => state.selected_contacts);
     const unselectedContact = useSearchContactStore(state => state.unselectedContact);
+    const emptySelectedContacts = useSearchContactStore(state => state.emptySelectedContacts);
 
     useEffect(() => {
         ContactService.searchChannel({
@@ -50,8 +51,12 @@ export default function ChooseUser() {
         }
     }
 
+    useEffect(() => {
+        emptySelectedContacts();
+    }, [emptySelectedContacts])
+
     return (
-        <div className="w-full min-h-screen bg-gray-900 text-white p-4">
+        <div className="w-full min-h-screen dark:bg-gray-900 dark:text-white p-4">
             {/* header */}
             <header className="flex items-center justify-between pb-3 border-b border-gray-700">
                 <BackButton typeWindow={EMPTY_WINDOW} />
@@ -88,7 +93,7 @@ export default function ChooseUser() {
                     {filtered.map(channel => (
                         <li
                             key={channel.id}
-                            className="flex items-center justify-between rounded hover:bg-gray-800"
+                            className="flex items-center justify-between rounded dark:hover:bg-gray-800"
                             onClick={() => toggle(channel.id)}
                         >
                             <div className="flex items-center">
@@ -99,12 +104,12 @@ export default function ChooseUser() {
                                 />
                                 <div className="ml-3">
                                     <p className="text-sm font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
-                                    <p className="text-xs text-blue-400">@{channel.user.username}</p>
+                                    <p className="text-xs text-blue-600 dark:text-blue-400">@{channel.user.username}</p>
                                 </div>
                             </div>
                             <Checkbox
                                 checked={selected_contacts.some(c => c.id === channel.id)}
-                                onChange={() => toggle(channel.id)}
+                                onChange={() => {}}
                             />
                         </li>
                     ))}

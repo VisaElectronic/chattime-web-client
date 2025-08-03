@@ -103,7 +103,7 @@ export default function ProfileSettings() {
       <div className="flex items-center justify-center py-8 px-4">
         <div className="w-full max-w-lg rounded-xl shadow-lg p-6 space-y-6">
           {/* Profile Photo + Name */}
-          <div className="flex items-center space-x-4 bg-gray-800 rounded-lg p-2 gap-3">
+          <div className="flex items-center space-x-4 dark:bg-gray-800 rounded-lg p-2 gap-3">
             <div className={
               'relative overflow-hidden cursor-pointer m-0 flex justify-center items-center' + (!files || files.length <= 0 ? '' : '')
             }>
@@ -112,7 +112,7 @@ export default function ProfileSettings() {
                 previewSize="lg"
               >
                 {
-                  (!files || files.length <= 0) && !profile?.avatar ? <HiCamera className="w-6 h-6 text-gray-400" /> :
+                  (!files || files.length <= 0) && !profile?.avatar ? <HiCamera className="w-6 h-6 dark:text-gray-400" /> :
                   <>
                     <Avatar
                         size="lg"
@@ -136,7 +136,7 @@ export default function ProfileSettings() {
                 onChange={e => setFirstname(e.target.value)}
                 type="text"
                 placeholder="test"
-                className="flex-1 text-white placeholder-gray-400 focus:outline-none pb-3"
+                className="flex-1 dark:text-white dark:placeholder-gray-400 focus:outline-none pb-3"
               />
               <hr className="border-solid text-[#666e7a]" />
               <input
@@ -145,44 +145,44 @@ export default function ProfileSettings() {
                 onChange={e => setLastname(e.target.value)}
                 type="text"
                 placeholder="test"
-                className="flex-1 text-white placeholder-gray-400 focus:outline-none pt-3"
+                className="flex-1 dark:text-white dark:placeholder-gray-400 focus:outline-none pt-3"
               />
             </div>
           </div>
-          <p className="text-gray-400 text-sm">
+          <p className="dark:text-gray-400 text-sm">
             Enter your name and add a profile photo.
           </p>
 
           {/* Bio */}
           <div>
-            <label className="block text-gray-200 text-xs mb-1">BIO</label>
+            <label className="block dark:text-gray-200 text-xs mb-1">BIO</label>
             <input
               id="bio"
               type="text"
               value={bio}
               onChange={e => setBio(e.target.value)}
               placeholder="A few words about you"
-              className="w-full bg-gray-800 text-white placeholder-gray-400 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-gray-500"
             />
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="dark:text-gray-400 text-sm mt-1">
               Any details such as age, occupation or city.
             </p>
-            <p className="text-gray-400 text-sm">Example: 23 y.o. designer from San Francisco</p>
+            <p className="dark:text-gray-400 text-sm">Example: 23 y.o. designer from San Francisco</p>
           </div>
 
           {/* Date of Birth */}
-          <div className="flex items-center justify-between bg-gray-800 px-4 py-2 rounded-lg">
-            <span className="text-gray-200 font-medium">Date of Birth</span>
+          <div className="flex items-center justify-between dark:bg-gray-800 px-4 py-2 rounded-lg">
+            <span className="dark:text-gray-200 font-medium">Date of Birth</span>
             <Datepicker 
               value={dob ?? new Date} 
               onChange={(date: Date | null) => date ? setDob(date) : null}
               placeholder="Pick Your Date Of Birth"
             />
           </div>
-          <p className="text-gray-400 text-sm">Only your contacts will see your birthday.</p>
+          <p className="dark:text-gray-400 text-sm">Only your contacts will see your birthday.</p>
 
           {/* Settings List */}
-          <div className="divide-y divide-gray-700 bg-gray-800 px-4 rounded-lg">
+          <div className="divide-y divide-gray-700 dark:bg-gray-800 px-4 rounded-lg">
             <ProfileField label="Username" value={profile?.username ? '@' + profile?.username : ''} />
             <ProfileField label="Phone Number" value={profile?.phone} />
             {/* <ProfileField label="Your Name Color" customElement={<div className="w-6 h-6 rounded-full bg-pink-500" />} />
@@ -190,11 +190,11 @@ export default function ProfileSettings() {
           </div>
 
           {/* Footer Actions */}
-          <div className="flex flex-col divide-y divide-gray-700 bg-gray-800 px-4 rounded-lg">
+          <div className="flex flex-col divide-y divide-gray-700 dark:bg-gray-800 px-4 rounded-lg">
             {/* <button className="text-indigo-400 font-medium hover:underline text-left py-2 cursor-pointer">
               Add Account
             </button> */}
-            <button className="text-red-500 font-medium hover:underline text-left py-2 cursor-pointer" onClick={handleLogout}>
+            <button className="text-red-600 font-medium hover:underline text-left py-2 cursor-pointer" onClick={handleLogout}>
               Log Out
             </button>
           </div>
@@ -214,11 +214,11 @@ interface ProfileFieldProps {
 function ProfileField({ label, value, actionText, customElement }: ProfileFieldProps) {
   return (
     <div className="flex items-center justify-between py-2">
-      <span className="text-gray-200">{label}</span>
+      <span className="dark:text-gray-200">{label}</span>
       <div className="flex items-center space-x-2">
-        {value && <span className="text-gray-400">{value}</span>}
+        {value && <span className="dark:text-gray-400">{value}</span>}
         {customElement && customElement}
-        {actionText && <span className="text-indigo-400 font-medium">{actionText}</span>}
+        {actionText && <span className="dark:text-indigo-400 font-medium">{actionText}</span>}
         <svg
           className="w-4 h-4 text-gray-500"
           fill="none"

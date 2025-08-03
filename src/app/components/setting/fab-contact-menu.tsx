@@ -36,7 +36,7 @@ export default function FabContactMenu() {
                 arrowIcon={false}
                 inline
                 label={
-                    <FaUserPlus className="w-6 h-6 text-white" />
+                    <FaUserPlus className="w-6 h-6 dark:text-white" />
                 }
             >
                 <DropdownItem icon={HiUserGroup} onClick={() => setShowAdd(true)}>
