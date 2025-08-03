@@ -89,10 +89,9 @@ export default function MessageConfirmFiles({
                     />
                     <button
                         className="px-2 text-blue-500"
-                        disabled={text.trim().length === 0}
                         onClick={() => {
-                            setText('');
                             onSend(text.trim(), uploadFiles)
+                            setText('');
                         }}
                     >
                         <FiSend

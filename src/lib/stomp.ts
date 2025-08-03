@@ -32,8 +32,8 @@ export function connectStomp(access_token: string) {
             console.debug('[STOMP]', str)
         },
         reconnectDelay: 5000,
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000,
+        heartbeatIncoming: 20000, // Client expects a message (or server ping) every 20 seconds
+        heartbeatOutgoing: 10000, // Client sends a heartbeat (pong) every 10 seconds if idle
     })
 
     stompClient.onConnect = (frame: Frame) => {
