@@ -1,5 +1,5 @@
 // pages/new-group.jsx
-import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
+import { HTMLAttributes, useCallback, useState } from 'react'
 import { Avatar, TextInput, Button } from 'flowbite-react'
 import {
   HiCamera,
@@ -9,11 +9,10 @@ import { API_DOMAIN } from '@/constants/api'
 import BackButton from '@/app/components/setting/back-button'
 import { CREATE_GROUP_CHOOSE_USER, EMPTY_WINDOW } from '@/constants/window'
 import Dropzone from '@/components/commons/dropzone'
-import { FileService } from '@/services/file.service'
-import { ContactService } from '@/services/contact.service'
 import { useGroupChannelStore } from '@/stores/group-channel'
 import { useWindowContentStore } from '@/stores/window-content'
-import { IMAGE_CHAT } from '@/constants/type'
+import { GroupService } from '@/services/group.service'
+import Loading from '@/components/commons/loading'
 
 const UploadGroupProfile: React.FC<HTMLAttributes<HTMLElement>> = props => {
   return (
@@ -27,9 +26,8 @@ const UploadGroupProfile: React.FC<HTMLAttributes<HTMLElement>> = props => {
 }
 
 export default function ConfirmGroup() {
-  const [, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [groupName, setGroupName] = useState('')
-  const [profilePath, setProfilePath] = useState('')
   const [files, setFiles] = useState<File[]>([])
   const selected_contacts = useSearchContactStore(state => state.selected_contacts);
   const addGroupChannel = useGroupChannelStore((state) => state.addItem);
@@ -40,44 +38,15 @@ export default function ConfirmGroup() {
     setFiles(acceptedFiles)
   }, [])
 
-  useEffect(() => {
-    if (files.length === 0) return
-    const upload = async () => {
-      setLoading(true)
-      try {
-        const formData = new FormData()
-        files.forEach(f => formData.append('files', f))
-        const res = await FileService.uploadFile({
-          files: files,
-          m_type: IMAGE_CHAT
-        })
-        if (res.success) {
-          setProfilePath(res.data[0].uri)
-          setFiles([])
-        } else {
-          throw new Error('Upload failed')
-        }
-      } catch (err) {
-        console.error(err)
-        if (typeof err === "string") {
-            err.toUpperCase()
-        } else if (err instanceof Error) {
-        }
-      } finally {
-        setLoading(false)
-      }
-    }
-    upload()
-  }, [files])
-
   const createGroup = async () => {
+    setLoading(true);
     try {
       const data = {
-        title: groupName,
-        profile: profilePath,
+        groupName: groupName,
+        photo: files,
         channelKeys: selected_contacts.map(c => c.key)
       };
-      const res = await ContactService.createGroup(data)
+      const res = await GroupService.createGroup(data)
       if(res.data) {
         addGroupChannel(res.data)
         setTypeWindow(EMPTY_WINDOW)
@@ -88,63 +57,68 @@ export default function ConfirmGroup() {
           err.toUpperCase()
       } else if (err instanceof Error) {
       }
+    } finally {
+      setLoading(false);
     }
   }
   return (
-    <div className='w-full px-5 bg-gray-900'>
-      <div className="min-h-screen text-white">
-        {/* Header */}
-        <header className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-          <BackButton typeWindow={CREATE_GROUP_CHOOSE_USER} />
-          <h1 className="text-lg font-medium">New Group</h1>
-          <Button
-            size="sm"
-            disabled={!groupName || selected_contacts.length === 0}
-            onClick={createGroup}
-          >
-            Create
-          </Button>
-        </header>
-
-        <main className="p-4 space-y-4">
-          {/* Group name & avatar */}
-          <div className="bg-gray-800 rounded-lg flex items-center p-4 space-x-4">
-            <Dropzone 
-              onFiles={handleFiles}
+    <>
+      {loading && <Loading />}
+      <div className='w-full px-5 bg-gray-900'>
+        <div className="min-h-screen text-white">
+          {/* Header */}
+          <header className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+            <BackButton typeWindow={CREATE_GROUP_CHOOSE_USER} />
+            <h1 className="text-lg font-medium">New Group</h1>
+            <Button
+              size="sm"
+              disabled={!groupName || selected_contacts.length === 0}
+              onClick={createGroup}
             >
-              <UploadGroupProfile />
-            </Dropzone>
-            <TextInput
-              placeholder="Group Name"
-              value={groupName}
-              onChange={e => setGroupName(e.target.value)}
-              className="bg-gray-800 border-0 focus:ring-0 text-white placeholder-gray-500 text-lg"
-            />
-          </div>
+              Create
+            </Button>
+          </header>
 
-          {/* Members section */}
-          <div className="bg-gray-800 rounded-lg overflow-hidden">
-            {/* <a className="flex items-center p-4 space-x-2 hover:bg-gray-700">
-              <HiUserAdd className="w-6 h-6 text-blue-400" />
-              <span className="text-blue-400 font-medium">Add Members</span>
-            </a> */}
-
-            {/* Selected members */}
-            {selected_contacts.map((channel) => (
-              <div
-                key={channel.id}
-                className={`flex items-center p-4 space-x-4 border-t border-gray-700`}
+          <main className="p-4 space-y-4">
+            {/* Group name & avatar */}
+            <div className="bg-gray-800 rounded-lg flex items-center p-4 space-x-4">
+              <Dropzone 
+                onFiles={handleFiles}
               >
-                <Avatar img={API_DOMAIN + '/' + channel.user.avatar} rounded size="md" />
-                <div>
-                  <p className="font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
-                  <p className="text-xs text-blue-400">@{channel.user.username}</p>
+                <UploadGroupProfile />
+              </Dropzone>
+              <TextInput
+                placeholder="Group Name"
+                value={groupName}
+                onChange={e => setGroupName(e.target.value)}
+                className="bg-gray-800 border-0 focus:ring-0 text-white placeholder-gray-500 text-lg"
+              />
+            </div>
+
+            {/* Members section */}
+            <div className="bg-gray-800 rounded-lg overflow-hidden">
+              {/* <a className="flex items-center p-4 space-x-2 hover:bg-gray-700">
+                <HiUserAdd className="w-6 h-6 text-blue-400" />
+                <span className="text-blue-400 font-medium">Add Members</span>
+              </a> */}
+
+              {/* Selected members */}
+              {selected_contacts.map((channel) => (
+                <div
+                  key={channel.id}
+                  className={`flex items-center p-4 space-x-4 border-t border-gray-700`}
+                >
+                  <Avatar img={API_DOMAIN + '/' + channel.user.avatar} rounded size="md" />
+                  <div>
+                    <p className="font-medium">{channel.user.firstname + ' ' + channel.user.lastname}</p>
+                    <p className="text-xs text-blue-400">@{channel.user.username}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </main>
+              ))}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

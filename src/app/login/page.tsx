@@ -89,7 +89,7 @@ export default function LoginPage() {
         {/* — Right side: login form — */}
         <div className="flex items-center justify-center p-12">
           <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-white">Welcome To Chattime</h2>
+            <h2 className="text-2xl font-bold mb-6 text-white">Welcome To Tonsaeay Chat</h2>
 
             {/* <div className="flex space-x-4 mb-6">
               <Button outline pill className="flex-1 text-xs">
