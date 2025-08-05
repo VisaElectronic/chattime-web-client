@@ -39,7 +39,6 @@ export function connectStomp(access_token: string) {
     stompClient.onConnect = (frame: Frame) => {
         console.log('STOMP connected:', frame)
         const ws_id: string = uuidv4();
-        // Example: subscribe to a topic
         stompClient?.subscribe(WS_ENDPOINTS.AUTH.SUB + ws_id, (message: IMessage) => {
             const body: WSResponse<User> = message.body ? JSON.parse(message.body) : null;
             console.log('Received message:', body)

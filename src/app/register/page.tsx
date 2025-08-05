@@ -45,13 +45,13 @@ export default function LoginPage() {
   return (
     <div>
       {loading && <Loading />}
-      <div className="min-h-screen dakr:bg-gray-900 text-white grid md:grid-cols-2">
+      <div className="min-h-screen dark:bg-gray-900 dark:text-white grid md:grid-cols-2">
         {/* — Left side: features list — */}
         <div className="p-12 flex flex-col justify-center space-y-8">
           <div className="flex items-center space-x-3">
             <div className="bg-blue-600 p-2 rounded-full">
               {/* replace with your SVG or icon */}
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" />
               </svg>
             </div>
@@ -63,7 +63,7 @@ export default function LoginPage() {
 
           <div className="flex items-center space-x-3">
             <div className="bg-blue-600 p-2 rounded-full">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" />
               </svg>
             </div>
@@ -75,7 +75,7 @@ export default function LoginPage() {
 
           <div className="flex items-center space-x-3">
             <div className="bg-blue-600 p-2 rounded-full">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" />
               </svg>
             </div>
@@ -89,7 +89,7 @@ export default function LoginPage() {
         {/* — Right side: login form — */}
         <div className="flex items-center justify-center p-12">
           <div className="w-full max-w-md dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-white">Create your Free Account</h2>
+            <h2 className="text-2xl font-bold mb-6 dark:text-white">Create your Free Account</h2>
 
             {/* <div className="flex space-x-4 mb-6">
               <Button outline pill className="flex-1 text-xs">
@@ -111,7 +111,7 @@ export default function LoginPage() {
             <form className="space-y-4">
               <div className="flex justify-between">
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="firstname" className="text-gray-200">First Name</Label>
+                  <Label htmlFor="firstname" className="dark:text-gray-200">First Name</Label>
                   <TextInput 
                     id="firstname"
                     type="text" 
@@ -121,7 +121,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="lastname" className="text-gray-200">Last Name</Label>
+                  <Label htmlFor="lastname" className="dark:text-gray-200">Last Name</Label>
                   <TextInput 
                     id="lastname"
                     type="text" 
@@ -132,7 +132,7 @@ export default function LoginPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="email" className="text-gray-200">Your Email</Label>
+                <Label htmlFor="email" className="dark:text-gray-200">Your Email</Label>
                 <TextInput 
                   id="email"
                   type="email" 
@@ -142,7 +142,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="phone" className="text-gray-200" >Your Phone</Label>
+                <Label htmlFor="phone" className="dark:text-gray-200" >Your Phone</Label>
                 <TextInput 
                   id="phone"
                   type="text" 
@@ -152,7 +152,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="password" className="text-gray-200" >Password</Label>
+                <Label htmlFor="password" className="dark:text-gray-200" >Password</Label>
                 <TextInput
                   id="password" 
                   type="password" 
@@ -161,7 +161,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="confirm-password" className="text-gray-200">Confirm Password</Label>
+                <Label htmlFor="confirm-password" className="dark:text-gray-200">Confirm Password</Label>
                 <TextInput
                   id="confirm-password" 
                   type="password" 
@@ -173,7 +173,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-5">
                   <Checkbox id="agree" className="w-6" />
-                  <Label htmlFor="agree" className="text-gray-200">By signing up, you are creating a account, and you agree to Terms of Use and Privacy Policy.</Label>
+                  <Label htmlFor="agree" className="dark:text-gray-200">By signing up, you are creating a account, and you agree to Terms of Use and Privacy Policy.</Label>
                 </div>
               </div>
 

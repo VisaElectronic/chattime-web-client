@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { FiMic } from 'react-icons/fi';
 import GestureComponent from './gesture';
+import { UtilService } from '@/services/util.service';
 
 interface VoiceRecorderProps {
     onSendVoiceFile: (files: File[]) => void;
@@ -53,7 +54,8 @@ export default function VoiceRecorder({
 
         setIsRecording(true);
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const recorder = new MediaRecorder(stream);
+        const mimeType = UtilService.getSupportedMimeType();
+        const recorder = new MediaRecorder(stream, { mimeType });
 
         const chunks: BlobPart[] = [];
 
@@ -62,15 +64,15 @@ export default function VoiceRecorder({
         };
 
         recorder.onstop = () => {
-            const file = new File(chunks, window.crypto.randomUUID() + '.webm', { type: 'audio/webm' });
-            const url = URL.createObjectURL(file) + '.webm';
+            const ext = recorder.mimeType.split('/')[1].split(';')[0]
+            const file = new File(chunks, window.crypto.randomUUID() + '.' + ext, { type: recorder.mimeType });
+            const url = URL.createObjectURL(file) + '.' + ext;
+            console.log('url to send', url);
             setAudioURL(url);
             setIsRecording(false);
 
             setAudioURL(url);
             setFiles([file]);
-
-            console.log('send ' + url + ' file to server');
 
             onSendVoiceFile([file]);
             reset();
