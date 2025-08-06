@@ -107,8 +107,7 @@ export default function ChatWindow() {
     useEffect(() => {
         const handleScroll = () => {
             const container = containerRef.current;
-            console.log('scroll',container ? container.scrollTop : 'N/A');
-            if (container && container.scrollTop <= 200 && !isLoading) {
+            if (container && container.scrollTop === 0 && !isLoading) {
                 setIsLoading(true);
                 setScrollToBottom(false);
                 onFetchMessages();

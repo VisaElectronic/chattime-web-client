@@ -38,7 +38,7 @@ export default function SideBarChat({ groupChannel }: SideBarChatProps) {
                         {fullname}
                     </p>
                     <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                        Hi There!
+                        View Chats
                     </p>
                 </div>
                 {/* <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
