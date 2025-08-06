@@ -7,10 +7,13 @@ import { create } from 'zustand'
  */
 type MessageState = {
     items: Message[]
+    currentOffset: number
     addItem: (item: Message) => void
     addItems: (items: Message[]) => void
     removeItem: (id: number) => void
-    clearAll: () => void         // optional: remove all items
+    clearAll: () => void
+    appendMessages: (items: Message[]) => void
+    setCurrentOffset: (offset: number) => void
 }
 
 /**
@@ -18,6 +21,7 @@ type MessageState = {
  */
 export const useMessageStore = create<MessageState>((set) => ({
     items: [],
+    currentOffset: 0,
     
     addItem: (item: Message) =>
         set((state) => {
@@ -36,4 +40,14 @@ export const useMessageStore = create<MessageState>((set) => ({
         })),
 
     clearAll: () => set({ items: [] }),
+
+    appendMessages: (items: Message[]) =>
+        set((state) => ({
+            items: [...state.items, ...items],
+        })),
+
+    setCurrentOffset: (offset: number) =>
+        set(() => ({
+            currentOffset: offset,
+        })),
 }))

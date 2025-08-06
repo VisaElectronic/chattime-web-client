@@ -41,6 +41,9 @@ export const ENDPOINTS = {
     file: {
         upload: `${API_BASE_URL}/files`,
     },
+    message: {
+        index: `${API_BASE_URL}/messages`,
+    }
 };
 
 export const DEFAULT_DATA = {

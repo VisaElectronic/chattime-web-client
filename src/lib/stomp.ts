@@ -103,7 +103,7 @@ export function connectToChatChannel(groupChannel: GroupChannel) {
     chatChannelSub = stompClient?.subscribe(WS_ENDPOINTS.CONNECT_CHAT.SUB(groupChannel.key), (message: IMessage) => {
         const body = message.body ? JSON.parse(message.body) : null;
         console.log('Received message:', body)
-        useMessageStore.getState().addItems(body.data);
+        // useMessageStore.getState().addItems(body.data);
         connectToChat(groupChannel);
     })
     sendWSMessage(
