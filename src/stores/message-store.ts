@@ -39,7 +39,10 @@ export const useMessageStore = create<MessageState>((set) => ({
             items: state.items.filter((i) => i.id !== id),
         })),
 
-    clearAll: () => set({ items: [] }),
+    clearAll: () => set({
+        items: [],
+        currentOffset: 0
+    }),
 
     appendMessages: (items: Message[]) =>
         set((state) => ({
