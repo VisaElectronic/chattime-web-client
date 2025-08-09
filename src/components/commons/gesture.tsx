@@ -75,6 +75,9 @@ function GestureComponent({
         <div
             className='relative'
             ref={divRef}
+            onTouchStart={handleMouseDown}
+            onTouchEnd={handleMouseUp}
+            onTouchCancel={cancelGesture}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={cancelGesture}
