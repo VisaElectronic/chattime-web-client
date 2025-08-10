@@ -5,6 +5,7 @@ export default class Message {
     id: number;
     content: string;
     group: GroupChannel;
+    user: User;
     createdBy: User;
     createdAt: Date;
     files?: string;
@@ -15,6 +16,7 @@ export default class Message {
         id: number,
         content: string,
         group: GroupChannel,
+        user: User,
         createdBy: User,
         createdAt: Date | string,
         files: string,
@@ -24,6 +26,7 @@ export default class Message {
         this.id = id
         this.content = content
         this.group = group
+        this.user = createdBy
         this.createdBy = createdBy
         this.createdAt = typeof createdAt === 'string'
             ? new Date(createdAt)
