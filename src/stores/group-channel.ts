@@ -22,10 +22,28 @@ type ChannelState = {
  */
 export const useGroupChannelStore = create<ChannelState>((set) => ({
     items: [],
-    addItem: (item: GroupChannel) =>
-        set((state) => ({
-            items: [...state.items, item],
-        })),
+    addItem: (newItem: GroupChannel) =>
+        set((state) => {
+            const exists = state.items.some(item => item.key === newItem.key);
+
+            if (exists) {
+                // If the item exists, update it and move it to the front
+                const updatedItems = state.items.map(item =>
+                    item.key === newItem.key ? { ...item, ...newItem } : item
+                );
+                const itemToMove = updatedItems.find(item => item.key === newItem.key)!;
+                const restOfItems = updatedItems.filter(item => item.key !== newItem.key);
+
+                return {
+                    items: [itemToMove, ...restOfItems]
+                };
+            } else {
+                // If the item doesn't exist, just add the new item to the front
+                return {
+                    items: [newItem, ...state.items]
+                };
+            }
+        }),
 
     updateGroupChannel: (item: GroupChannel) =>
         set((state) => {
@@ -35,8 +53,9 @@ export const useGroupChannelStore = create<ChannelState>((set) => ({
                         gc = {
                             ...gc,
                             name: item.name,
-                            photo: item.photo
+                            photo: item.photo,
                         }
+                        if(item.unread != null) gc.unread = item.unread
                     }
                     return gc;
                 }),
@@ -57,7 +76,7 @@ export const useGroupChannelStore = create<ChannelState>((set) => ({
     selectGroupChannel: (item: GroupChannel) => set(() => ({
         selectedGroupChannel: item
     })),
-    updateSelectGroupChannel: (item: GroupChannel) => 
+    updateSelectGroupChannel: (item: GroupChannel) =>
         set((state) => {
             const selectedGroupChannel = state.selectedGroupChannel!;
             return {

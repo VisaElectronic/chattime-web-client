@@ -23,5 +23,6 @@ export const WS_CONNECTION_TYPES ={
     ONLINE: {
         LIST_GROUPS: 'LIST_GROUPS',
         NOTIFY_GROUP: 'NOTIFY_GROUP',
+        UPDATE_GROUP: 'UPDATE_GROUP',
     }
 }

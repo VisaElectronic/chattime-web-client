@@ -1,4 +1,5 @@
 import Channel from "./Channel";
+import Message from "./Message";
 
 export default class GroupChannel {
     id: number;
@@ -10,6 +11,9 @@ export default class GroupChannel {
     photo: string;
     channel: Channel;
     channels: Channel[];
+    lastMessage: Message;
+    unread: number;
+    displayOrder: number;
 
     constructor(
         id: number,
@@ -20,7 +24,10 @@ export default class GroupChannel {
         group: boolean,
         photo: string,
         channel: Channel,
-        channels: Channel[]
+        channels: Channel[],
+        lastMessage: Message,
+        unread: number,
+        displayOrder: number
     ) {
         this.id = id
         this.key = key
@@ -31,5 +38,8 @@ export default class GroupChannel {
         this.photo = photo
         this.channel = channel
         this.channels = channels
+        this.lastMessage = lastMessage
+        this.unread = unread
+        this.displayOrder = displayOrder
     }
 }

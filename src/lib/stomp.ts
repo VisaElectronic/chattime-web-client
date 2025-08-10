@@ -85,8 +85,14 @@ export function connectToOnline(res: WSResponse<User>) {
         console.log('Received OnlineResponse:', JSON.parse(message.body))
         if(body.data.type === WS_CONNECTION_TYPES.ONLINE.LIST_GROUPS) {
             useGroupChannelStore.getState().addItems(body.data.groups);
-        } else {
+        } else if(body.data.type === WS_CONNECTION_TYPES.ONLINE.NOTIFY_GROUP) {
             console.log('Received OnlineResponse Notify:', body)
+            const notifyGroup = body.data.groups[0] ?? null;
+            if(notifyGroup) useGroupChannelStore.getState().addItem(notifyGroup);
+        } else {
+            console.log('Received Update Group:', body)
+            const notifyGroup = body.data.groups[0] ?? null;
+            if(notifyGroup) useGroupChannelStore.getState().updateGroupChannel(notifyGroup);
         }
     })
     sendWSMessage(
