@@ -7,6 +7,7 @@ import {
 import AddContactModal from '../contact/add-contact';
 import { ContactData, ContactService } from '@/services/contact.service';
 import { useGroupChannelStore } from '@/stores/group-channel';
+import { toast } from 'react-toastify';
 
 export default function FabContactMenu() {
     const addContact = useGroupChannelStore((state) => state.addItem);
@@ -15,13 +16,12 @@ export default function FabContactMenu() {
     const handleCreate = async (data: ContactData) => {
         try {
             const res = await ContactService.addContact(data);
-            console.log(res);
             if(res.success) {
                 addContact(res.data)
                 setShowAdd(false)
                 return
             }
-            console.error(res.data)
+            toast.warn(res.message ?? 'Unexpected Error.');
         } catch (err: unknown) {
             if (err instanceof Error) {
                 console.error(err.message);

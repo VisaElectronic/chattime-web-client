@@ -94,14 +94,14 @@ export default function Sidebar() {
   })();
 
   return (
-    <div className="h-full">
+    <div className="h-full flex flex-col">
       {searchBar}
-      <div className={active == 2 ? "dark:text-white p-3 lg:p-6" : "dark:text-white"}>
+      <div className={active == 2 ? "flex-1 dark:text-white p-3 lg:p-6" : "flex-1 dark:text-white"}>
         <ul className="space-y-2 font-medium">
           {content}
         </ul>
       </div>
-      <div className="w-full lg:w-85 bottom-0 fixed py-3 dark:bg-gray-800 border-t-[0.01px] dark:border-t-[#656565] border-r-[0.01px] dark:border-r-[#656565]">
+      <div className="w-full lg:w-85 bottom-0 sticky py-3 dark:bg-gray-800 border-t-[0.01px] dark:border-t-[#656565] border-r-[0.01px] dark:border-r-[#656565]">
         <div className="flex justify-around">
           {tabs.map((tab, idx) => {
             const Icon = tab.icon;

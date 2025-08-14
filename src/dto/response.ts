@@ -1,4 +1,5 @@
 export default interface APIResponse<T> {
     data: T;
-    success: boolean
+    success: boolean;
+    message: string;
 }

@@ -23,18 +23,19 @@ export default function ChatDetailScreen() {
     const [showAddMember, setShowAddMember] = useState(false);
     const [selectContextMenu, setSelectContextMenu] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const chatName = selectedGroupChannel?.name ?? '';
-    const chatPhoto = selectedGroupChannel?.group ? selectedGroupChannel.photo : selectedGroupChannel?.channel.user.avatar;
+    const chatName = selectedGroupChannel.group ? (selectedGroupChannel?.name ?? '') : selectedGroupChannel.channel.user.firstname + ' ' + selectedGroupChannel.channel.user.lastname;
+    const chatPhoto = selectedGroupChannel.group ? selectedGroupChannel.photo : selectedGroupChannel?.channel.user.avatar;
 
     const [members, setMembers] = useState<ChannelMember[]>([]);
 
     useEffect(() => {
+        if(!selectedGroupChannel.group) return; 
         GroupService.getInfo(selectedGroupChannel.key, {
             type: 'MEMBERS'
         })
             .then(data => setMembers(data))
             .catch(err => console.error(err))
-    }, [selectedGroupChannel.key])
+    }, [selectedGroupChannel?.group, selectedGroupChannel.key])
 
     const handleAddMember = async (data: UpdateGroupDto) => {
         setLoading(true);
@@ -124,66 +125,74 @@ export default function ChatDetailScreen() {
                             />
                         </div>
                         <h2 className="mt-4 text-2xl font-bold">{chatName}</h2>
-                        <p className="text-gray-400">{members.length} members</p>
+                        {
+                            selectedGroupChannel.group &&
+                            <p className="text-gray-400">{members.length} members</p>
+                        }
                     </div>
 
-                    <div className='m-5 max-w-md mx-auto flex justify-evenly'>
-                        <CardCustom className='cursor-pointer' onAction={() => setShowAddMember(true)}>
-                            <div className='flex flex-col items-center'>
-                                <FaUserPlus className="w-6 h-6 text-primary-400" />
-                            </div>
-                        </CardCustom>
+                    {
+                        selectedGroupChannel.group &&
+                        <>
+                            <div className='m-5 max-w-md mx-auto flex justify-evenly'>
+                                <CardCustom className='cursor-pointer' onAction={() => setShowAddMember(true)}>
+                                    <div className='flex flex-col items-center'>
+                                        <FaUserPlus className="w-6 h-6 text-primary-400" />
+                                    </div>
+                                </CardCustom>
 
-                        <CardCustom className='cursor-pointer'>
-                            <div className='flex items-center'>
-                                <HiDotsHorizontal />
+                                <CardCustom className='cursor-pointer'>
+                                    <div className='flex items-center'>
+                                        <HiDotsHorizontal />
+                                    </div>
+                                </CardCustom>
                             </div>
-                        </CardCustom>
-                    </div>
-
-                    {/* Members List */}
-                    <div className="max-w-md mx-auto dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
-                        <Tabs aria-label="Info tabs" className='gap-0 p-0'>
-                            <TabItem active title="Members" className='p-0'>
-                                <List className='p-0 divide-y divide-gray-200 dark:divide-gray-700'>
-                                    {members.map((member) => {
-                                        if(member.role == ADMIN_ROLE_TYPE) {
-                                            return <ListItem 
+                            {/* Members List */}
+                            <div className="max-w-md mx-auto dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                                <Tabs aria-label="Info tabs" className='gap-0 p-0'>
+                                    <TabItem active title="Members" className='p-0'>
+                                        <List className='p-0 divide-y divide-gray-200 dark:divide-gray-700'>
+                                            {members.map((member) => {
+                                                if(member.role == ADMIN_ROLE_TYPE) {
+                                                    return <ListItem 
+                                                            key={member.key}
+                                                            className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer"
+                                                        >
+                                                        <div className="flex items-center space-x-4">
+                                                            <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
+                                                            <div>
+                                                                <h6 className="text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
+                                                            </div>
+                                                        </div>
+                                                        {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}
+                                                    </ListItem>;
+                                                }
+                                                return <ContextMenu
+                                                    className="flex flex-col"
+                                                    items={contextMenuItems}
                                                     key={member.key}
-                                                    className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer"
+                                                    currentChildKey={member.key}
+                                                    setSelectContextMenu={setSelectContextMenu}
+                                                    selectContextMenu={selectContextMenu}
                                                 >
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
-                                                    <div>
-                                                        <h6 className="text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
-                                                    </div>
-                                                </div>
-                                                {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}
-                                            </ListItem>;
-                                        }
-                                        return <ContextMenu
-                                            className="flex flex-col"
-                                            items={contextMenuItems}
-                                            key={member.key}
-                                            currentChildKey={member.key}
-                                            setSelectContextMenu={setSelectContextMenu}
-                                            selectContextMenu={selectContextMenu}
-                                        >
-                                            <ListItem className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer">
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
-                                                    <div>
-                                                        <h6 className="dark:text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
-                                                    </div>
-                                                </div>
-                                                {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}
-                                            </ListItem>
-                                        </ContextMenu>;
-                                    })}
-                                </List>
-                            </TabItem>
-                        </Tabs>
-                    </div>
+                                                    <ListItem className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer">
+                                                        <div className="flex items-center space-x-4">
+                                                            <Avatar img={API_DOMAIN + '/' + 'uploads/default-user.png'} rounded />
+                                                            <div>
+                                                                <h6 className="dark:text-white text-sm">{member.user ? member.user.firstname + ' ' + member.user.lastname : ''}</h6>
+                                                            </div>
+                                                        </div>
+                                                        {member.role && member.role === ADMIN_ROLE_TYPE && <Badge color="info" size="sm">Admin</Badge>}
+                                                    </ListItem>
+                                                </ContextMenu>;
+                                            })}
+                                        </List>
+                                    </TabItem>
+                                </Tabs>
+                            </div>
+                        </>
+                    }
+
                 </div>
 
                 <AddMemberModal

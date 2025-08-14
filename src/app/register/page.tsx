@@ -1,11 +1,13 @@
 "use client";
 
 import Loading from "@/components/commons/loading";
-import { LOGIN_ROUTE } from "@/constants/routes";
+import { REGISTER_VERIFY_OTP_ROUTE } from "@/constants/routes";
+import { RegisterOTPDto } from "@/dto/auth/register-otp.request";
 import { AuthService } from "@/services/auth.service";
 import { Button, Label, TextInput, Checkbox } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +17,7 @@ export default function LoginPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -24,14 +27,26 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await AuthService.register({
+      if(password !== confirmPassword) {
+        toast.error('Password does not match confirm password.');
+        return;
+      }
+      const data: RegisterOTPDto = {
         firstname,
         lastname,
         phone,
         email,
-        password
-      });
-      router.push(LOGIN_ROUTE); // or wherever you want to go
+        password,
+        identifier: ''
+      };
+      const res = await AuthService.registerOtp(data);
+      if(res.success && res.data.identifier) {
+        data.identifier = res.data.identifier;
+        sessionStorage.setItem('register-info', JSON.stringify(data))
+        router.push(REGISTER_VERIFY_OTP_ROUTE); // or wherever you want to go
+        return;
+      }
+      toast.error(res.message ?? '500 Internal Server Error');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
@@ -166,7 +181,7 @@ export default function LoginPage() {
                   id="confirm-password" 
                   type="password" 
                   placeholder="••••••••" 
-                  onChange={(e) => setPassword(e.currentTarget.value)} required 
+                  onChange={(e) => setConfirmPassword(e.currentTarget.value)} required 
                 />
               </div>
 

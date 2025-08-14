@@ -13,7 +13,7 @@ interface MessageBubbleProps {
 export default function MessageBubble({ content, isCurrentUser, createdAt, avatar }: MessageBubbleProps) {
   const alignment = isCurrentUser ? "justify-end" : "justify-start";
   const bubbleStyle = isCurrentUser ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-800 dark:text-gray-200";
-  const date = (typeof createdAt === 'string' ? new Date(createdAt) : createdAt);
+  const date = new Date(createdAt);
 
   return (
     <div className={`flex ${alignment} gap-1`}>

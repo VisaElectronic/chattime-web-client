@@ -4,6 +4,11 @@ import { ENDPOINTS } from "@/constants/api";
 import { Http } from "@/utils/http";
 import LoginResponse from "@/dto/auth/login.response";
 import RegisterResponse from "@/dto/auth/register.response";
+import { RegisterOTPDto } from "@/dto/auth/register-otp.request";
+import APIResponse from "@/dto/response";
+import { RegisterVerifyOTPDto } from "@/dto/auth/register-verify.request";
+import { RegisterOTPResponseDto } from "@/dto/auth/register-otp.response";
+import { RegisterResendOTPDto } from "@/dto/auth/register-resend.request";
 
 export interface LoginPayload { email: string; password: string }
 export interface RegisterPayload extends Record<string, string>{
@@ -42,5 +47,17 @@ export class AuthService {
 
     static getAuthToken() {
         return localStorage.getItem('access_token');
+    }
+
+    static registerOtp(data: RegisterOTPDto): Promise<APIResponse<RegisterOTPResponseDto>> {
+        return Http.postForm<APIResponse<RegisterOTPResponseDto>>(ENDPOINTS.auth.register, data);
+    }
+
+    static registerVerify(data: RegisterVerifyOTPDto): Promise<APIResponse<string>> {
+        return Http.postForm<APIResponse<string>>(ENDPOINTS.auth.registerVerify, data);
+    }
+
+    static registerResend(data: RegisterResendOTPDto): Promise<APIResponse<RegisterOTPResponseDto>> {
+        return Http.postForm<APIResponse<RegisterOTPResponseDto>>(ENDPOINTS.auth.registerResend, data);
     }
 }

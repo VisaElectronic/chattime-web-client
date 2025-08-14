@@ -27,7 +27,7 @@ export default function SideBarContact({groupChannel}: SideBarContactProps) {
     return (
         <li onClick={clickOnChannel}>
             <div className="flex items-center p-3">
-                <div className="shrink-0">
+                <div className="shrink-0 z-[-1]">
                     <Avatar
                         img={API_DOMAIN + '/' + (profile ? profile : DEFAULT_DATA.PROFILE)}
                         rounded

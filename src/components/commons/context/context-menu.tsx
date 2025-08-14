@@ -34,8 +34,13 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
 
   // show menu at mouse position
   const handleContextMenu = (e: React.MouseEvent) => {
+    console.log('currentChildKey', currentChildKey);
+    console.log('selectContextMenu', selectContextMenu);
     e.preventDefault();
     setPos({ x: e.pageX, y: e.pageY });
+    if (currentChildKey === selectContextMenu) {
+      setVisible(true);
+    }
     setSelectContextMenu(currentChildKey);
   };
 
