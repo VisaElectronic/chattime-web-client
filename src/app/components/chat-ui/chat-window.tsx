@@ -33,6 +33,7 @@ export default function ChatWindow() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [scrollToBottom, setScrollToBottom] = useState(true);
+    const [canScroll, setCanScroll] = useState(false);
 
     // When the user sends a new message, append it
     const handleSend = useCallback(
@@ -107,7 +108,7 @@ export default function ChatWindow() {
     useEffect(() => {
         const handleScroll = () => {
             const container = containerRef.current;
-            if (container && container.scrollTop === 0 && !isLoading) {
+            if (container && container.scrollTop === 0 && !isLoading && canScroll) {
                 setIsLoading(true);
                 setScrollToBottom(false);
                 onFetchMessages();
@@ -122,7 +123,7 @@ export default function ChatWindow() {
                 container.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [isLoading, onFetchMessages]);
+    }, [canScroll, isLoading, onFetchMessages]);
 
     useEffect(() => {
         if (selectedGroupChannel) {
@@ -146,6 +147,9 @@ export default function ChatWindow() {
                 console.log('res', res);
                 appendMessages(res.data);
                 setCurrentOffset(1)
+                setTimeout(() => {
+                    setCanScroll(true);
+                }, 500);
             } catch (err) {
                 console.error(err);
             } finally {
