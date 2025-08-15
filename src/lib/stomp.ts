@@ -42,7 +42,7 @@ export function connectStomp(access_token: string) {
         stompClient?.subscribe(WS_ENDPOINTS.AUTH.SUB + ws_id, (message: IMessage) => {
             const body: WSResponse<User> = message.body ? JSON.parse(message.body) : null;
             console.log('Received message:', body)
-            if (body.data as unknown === 'token_expired') window.location.href = LOGIN_ROUTE;
+            if (body.data as unknown === 'token_expired' || body.message as unknown === 'token_expired') window.location.href = LOGIN_ROUTE;
             connectToOnline(body);
         })
         sendWSMessage(
