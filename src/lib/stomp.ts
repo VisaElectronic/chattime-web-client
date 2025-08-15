@@ -89,7 +89,7 @@ export function connectToOnline(res: WSResponse<User>) {
             console.log('Received OnlineResponse Notify:', body)
             const notifyGroup = body.data.groups[0] ?? null;
             if(notifyGroup) useGroupChannelStore.getState().addItem(notifyGroup);
-        } else {
+        } else if(body.data.type === WS_CONNECTION_TYPES.ONLINE.UPDATE_GROUP) {
             console.log('Received Update Group:', body)
             const notifyGroup = body.data.groups[0] ?? null;
             if(notifyGroup) useGroupChannelStore.getState().updateGroupChannel(notifyGroup);

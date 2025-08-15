@@ -23,7 +23,6 @@ export default function ChatWindow() {
     const currentOffset = useMessageStore((state) => state.currentOffset);
     const setCurrentOffset = useMessageStore((state) => state.setCurrentOffset);
     const appendMessages = useMessageStore((state) => state.appendMessages);
-    const clearAll = useMessageStore((state) => state.clearAll);
     const [profile, setProfile] = useState('');
     const [fullname, setFullname] = useState('');
     const [messageType, setMessageType] = useState(TEXT_CHAT);
@@ -91,7 +90,7 @@ export default function ChatWindow() {
             const offset = (currentOffset) * 10;
             const params: FetchMessagesParams = {
                 groupId: selectedGroupChannel!.key,
-                limit: 10,
+                limit: 11,
                 offset: offset
             };
             const res = await MessageService.index(params);
@@ -131,8 +130,7 @@ export default function ChatWindow() {
             setProfile(selectedGroupChannel.group ? selectedGroupChannel.photo : channel?.user.avatar);
             setFullname(selectedGroupChannel.group ? selectedGroupChannel.name : channel?.user.firstname + ' ' + channel?.user.lastname);
         }
-        clearAll();
-    }, [clearAll, selectedGroupChannel])
+    }, [selectedGroupChannel])
 
     useEffect(() => {
         const fetchMessages = async () => {

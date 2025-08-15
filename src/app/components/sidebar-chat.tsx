@@ -6,6 +6,7 @@ import Channel from "@/models/Channel";
 import GroupChannel from "@/models/GroupChannel";
 import Message from "@/models/Message";
 import { useGroupChannelStore } from "@/stores/group-channel";
+import { useMessageStore } from "@/stores/message-store";
 import { useWindowContentStore } from "@/stores/window-content";
 import { Avatar, Badge } from "flowbite-react";
 
@@ -16,11 +17,13 @@ type SideBarChatProps = {
 export default function SideBarChat({ groupChannel }: SideBarChatProps) {
     const selectGroupChannel = useGroupChannelStore((state) => state.selectGroupChannel);
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
+    const clearAll = useMessageStore((state) => state.clearAll);
     const channel: Channel = groupChannel.channel;
     const profile = groupChannel.group ? groupChannel.photo : channel?.user.avatar;
     const fullname = groupChannel.group ? groupChannel.name : channel?.user.firstname + ' ' + channel?.user.lastname;
 
     const clickOnChannel = () => {
+        clearAll();
         setTypeWindow(CHAT_WINDOW);
         connectToChatChannel(groupChannel);
         selectGroupChannel(groupChannel);
