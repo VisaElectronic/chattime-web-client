@@ -16,7 +16,23 @@ import Loading from "@/components/commons/loading";
 import FetchMessagesParams from "@/dto/message/index.request";
 import MessageService from "@/services/message.service";
 
-export default function ChatWindow() {
+interface ChatWindowProps {
+    isLoading: boolean;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    scrollToBottom: boolean;
+    setScrollToBottom: React.Dispatch<React.SetStateAction<boolean>>;
+    canScroll: boolean;
+    setCanScroll: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ChatWindow: React.FC<ChatWindowProps> = ({ 
+    isLoading, 
+    setIsLoading,
+    scrollToBottom,
+    setScrollToBottom,
+    canScroll,
+    setCanScroll
+}) => {
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     const selectedGroupChannel = useGroupChannelStore((state) => state.selectedGroupChannel);
     const messages = useMessageStore((state) => state.items);
@@ -31,9 +47,6 @@ export default function ChatWindow() {
     const [loading, setLoading] = useState(false);
     const [, setIsFetchingMore] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [scrollToBottom, setScrollToBottom] = useState(true);
-    const [canScroll, setCanScroll] = useState(false);
 
     // When the user sends a new message, append it
     const handleSend = useCallback(
@@ -103,12 +116,13 @@ export default function ChatWindow() {
             setIsFetchingMore(false);
             setIsLoading(false);
         }
-    }, [appendMessages, currentOffset, selectedGroupChannel, setCurrentOffset]);
+    }, [appendMessages, currentOffset, selectedGroupChannel, setCurrentOffset, setIsLoading]);
 
     useEffect(() => {
         const handleScroll = () => {
             const container = containerRef.current;
             if (container && container.scrollTop === 0 && !isLoading && canScroll) {
+                console.info('Scroll Fetch', container.scrollTop, isLoading, canScroll);
                 setIsLoading(true);
                 setScrollToBottom(false);
                 onFetchMessages();
@@ -123,7 +137,7 @@ export default function ChatWindow() {
                 container.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [canScroll, isLoading, onFetchMessages]);
+    }, [canScroll, isLoading, onFetchMessages, setIsLoading, setScrollToBottom]);
 
     useEffect(() => {
         if (selectedGroupChannel) {
@@ -138,16 +152,17 @@ export default function ChatWindow() {
             if(!selectedGroupChannel) return;
             setIsFetchingMore(true);
             try {
+                console.info('First Fetch');
                 const params: FetchMessagesParams = {
                     groupId: selectedGroupChannel.key,
                     limit: 11,
                     offset: 0
                 };
                 const res = await MessageService.index(params);
-                console.log('res', res);
                 appendMessages(res.data);
                 setCurrentOffset(1)
                 setTimeout(() => {
+                    console.info('set scroll to true');
                     setCanScroll(true);
                 }, 500);
             } catch (err) {
@@ -157,7 +172,7 @@ export default function ChatWindow() {
             }
         }
         fetchMessages();
-    }, [appendMessages, selectedGroupChannel, setCurrentOffset]);
+    }, [appendMessages, selectedGroupChannel, setCanScroll, setCurrentOffset]);
 
     return (
         <>
@@ -197,3 +212,5 @@ export default function ChatWindow() {
         </>
     );
 }
+
+export default ChatWindow;

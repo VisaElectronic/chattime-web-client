@@ -22,7 +22,6 @@ export default function MessageList({
     if(scrollToBottom) {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-    console.log('scroll bottom');
   }, [messages, scrollToBottom]);
 
   return (

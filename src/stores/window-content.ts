@@ -5,8 +5,10 @@ import { create } from 'zustand'
  * 2) Define the Zustand state plus actions.
  */
 type WindowContentState = {
-    typeWindow: number               // the list of objects
+    typeWindow: number
+    resetWindow: boolean
     setTypeWindow: (typeWindow: number) => void
+    setResetWindow: (resetWindow: boolean) => void
 }
 
 /**
@@ -15,10 +17,15 @@ type WindowContentState = {
 export const useWindowContentStore = create<WindowContentState>(
     (set) => ({
         typeWindow: EMPTY_WINDOW,
-
+        resetWindow: false,
         setTypeWindow: (typeWindow: number) =>
             set(() => ({
                 typeWindow: typeWindow,
+                resetWindow: true
+            })),
+        setResetWindow: (resetWindow: boolean) =>
+            set(() => ({
+                resetWindow: resetWindow
             })),
     })
 )
