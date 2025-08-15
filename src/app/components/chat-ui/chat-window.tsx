@@ -87,7 +87,7 @@ export default function ChatWindow() {
     const onFetchMessages = useCallback(async () => {
         setIsFetchingMore(true);
         try {
-            const offset = (currentOffset) * 10;
+            const offset = (currentOffset) * 11;
             const params: FetchMessagesParams = {
                 groupId: selectedGroupChannel!.key,
                 limit: 11,
@@ -139,7 +139,7 @@ export default function ChatWindow() {
             try {
                 const params: FetchMessagesParams = {
                     groupId: selectedGroupChannel.key,
-                    limit: 10,
+                    limit: 11,
                     offset: 0
                 };
                 const res = await MessageService.index(params);
