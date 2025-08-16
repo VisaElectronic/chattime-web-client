@@ -1,6 +1,7 @@
 "use client";
 
 import Loading from "@/components/commons/loading";
+import ToastBoss from "@/components/commons/toast-container";
 import { REGISTER_VERIFY_OTP_ROUTE } from "@/constants/routes";
 import { RegisterOTPDto } from "@/dto/auth/register-otp.request";
 import { AuthService } from "@/services/auth.service";
@@ -192,7 +193,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <Button fullSized onClick={handleSubmit}>Create an account</Button>
+              <Button fullSized onClick={handleSubmit} disabled={loading ? true : false}>Create an account</Button>
             </form>
 
             <p className="text-center text-gray-400 text-sm mt-6">
@@ -202,6 +203,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <ToastBoss />
     </div>
   );
 }

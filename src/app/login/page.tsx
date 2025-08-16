@@ -1,13 +1,15 @@
 "use client";
 
 import Loading from "@/components/commons/loading";
-import { CHAT_ROUTE } from "@/constants/routes";
+import ToastBoss from "@/components/commons/toast-container";
+import { CHAT_ROUTE, FORGOT_PASSWORD } from "@/constants/routes";
 import LoginResponse from "@/dto/auth/login.response";
 import { AuthService } from "@/services/auth.service";
 import { useUserStore } from "@/stores/profile";
-import { Button, Label, TextInput, Checkbox } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,12 +33,14 @@ export default function LoginPage() {
       const response: LoginResponse = await AuthService.login({ email, password });
       AuthService.storeAuthToken(response.data.accessToken);
       setUser(response.data.profile)
-      router.push(CHAT_ROUTE); // or wherever you want to go
+      router.push(CHAT_ROUTE);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
+        toast.error(err.message ?? 'Something Went Wrong.')
       } else {
         setError(String(err))
+        toast.error(String(err) ?? 'Something Went Wrong.')
       }
     } finally {
       setLoading(false);
@@ -111,7 +115,7 @@ export default function LoginPage() {
             <form className="space-y-4">
               <div>
                 <Label htmlFor="email" className="dark:text-gray-200" />
-                <TextInput 
+                <TextInput
                   id="email"
                   type="email"
                   placeholder="Enter your email"
@@ -123,12 +127,12 @@ export default function LoginPage() {
                 <TextInput id="password" type="password" placeholder="••••••••" onChange={(e) => setPassword(e.currentTarget.value)} required />
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-5">
+              <div className="flex items-center justify-end">
+                {/* <div className="flex items-center gap-5">
                   <Checkbox id="remember" />
                   <Label htmlFor="remember" className="dark:text-gray-200">Remember me</Label>
-                </div>
-                <a href="#" className="text-blue-500 hover:underline text-sm">Forgot password?</a>
+                </div> */}
+                <a href={FORGOT_PASSWORD} className="text-blue-500 hover:underline text-sm">Forgot password?</a>
               </div>
 
               <Button fullSized onClick={handleSubmit}>Sign in to your account</Button>
@@ -141,6 +145,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <ToastBoss />
     </div>
   );
 }

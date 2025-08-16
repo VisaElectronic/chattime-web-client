@@ -25,6 +25,8 @@ export const ENDPOINTS = {
         register: `${API_DOMAIN}/register`,
         registerVerify: `${API_DOMAIN}/register-verify`,
         registerResend: `${API_DOMAIN}/register-resend`,
+        forgotPassword: `${API_DOMAIN}/forgot-password`,
+        resetPassword: `${API_DOMAIN}/reset-password`,
     },
     user: {
         profile: `${API_BASE_URL}/user/profile`,

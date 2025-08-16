@@ -10,9 +10,9 @@ import { useWindowContentStore } from "@/stores/window-content";
 import ChooseUser from "./windows/group-channel/choose-user";
 import ConfirmGroup from "./windows/group-channel/confirm-group";
 import ChatDetailScreen from "./components/chat-ui/chat-detail";
-import { ToastContainer } from 'react-toastify';
 import ChatDetailEditScreen from "./components/chat-ui/chat-detail-edit";
 import { useClientMediaQuery } from "@/hook/useClientMediaQuery";
+import ToastBoss from "@/components/commons/toast-container";
 
 function Home() {
   const typeWindow = useWindowContentStore(state => state.typeWindow);
@@ -61,7 +61,7 @@ function Home() {
           {windowContent}
         </div>
       </div>
-      <ToastContainer />
+      <ToastBoss />
     </div>
   );
 }

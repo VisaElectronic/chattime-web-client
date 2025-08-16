@@ -2,6 +2,7 @@
 
 import Loading from '@/components/commons/loading';
 import SimpleCountdown from '@/components/commons/simple-countdown';
+import ToastBoss from '@/components/commons/toast-container';
 import { LOGIN_ROUTE, REGISTER_ROUTE } from '@/constants/routes';
 import { RegisterOTPDto } from '@/dto/auth/register-otp.request';
 import { RegisterResendOTPDto } from '@/dto/auth/register-resend.request';
@@ -181,6 +182,7 @@ const VerifyRegister: FC = () => {
           </div>
         </div>
       </div>
+      <ToastBoss />
     </div>
   );
 };

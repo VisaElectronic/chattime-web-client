@@ -9,6 +9,8 @@ import APIResponse from "@/dto/response";
 import { RegisterVerifyOTPDto } from "@/dto/auth/register-verify.request";
 import { RegisterOTPResponseDto } from "@/dto/auth/register-otp.response";
 import { RegisterResendOTPDto } from "@/dto/auth/register-resend.request";
+import { ForgotPasswordDto } from "@/dto/auth/forgot-password.request";
+import { ResetPasswordDto } from "@/dto/auth/reset-password.request";
 
 export interface LoginPayload { email: string; password: string }
 export interface RegisterPayload extends Record<string, string>{
@@ -59,5 +61,13 @@ export class AuthService {
 
     static registerResend(data: RegisterResendOTPDto): Promise<APIResponse<RegisterOTPResponseDto>> {
         return Http.postForm<APIResponse<RegisterOTPResponseDto>>(ENDPOINTS.auth.registerResend, data);
+    }
+
+    static forgotPassword(data: ForgotPasswordDto): Promise<APIResponse<RegisterOTPResponseDto>> {
+        return Http.postForm<APIResponse<RegisterOTPResponseDto>>(ENDPOINTS.auth.forgotPassword, data);
+    }
+
+    static resetPassword(data: ResetPasswordDto): Promise<APIResponse<RegisterOTPResponseDto>> {
+        return Http.postForm<APIResponse<RegisterOTPResponseDto>>(ENDPOINTS.auth.resetPassword, data);
     }
 }
