@@ -126,7 +126,7 @@ export default function ChatDetailScreen() {
                     }
                 </header>
 
-                <div className='my-5 mt-[100px]'>
+                <div className='mb-[100px] mt-[100px]'>
                     {/* Avatar & Title */}
                     <div className="flex flex-col items-center">
                         <div className="rounded-full bg-gradient-to-br from-teal-400 to-blue-600 flex items-center justify-center text-6xl">
@@ -165,7 +165,7 @@ export default function ChatDetailScreen() {
                                     <TabItem active title="Members" className='p-0'>
                                         <List className='p-0 divide-y divide-gray-200 dark:divide-gray-700'>
                                             {members.map((member) => {
-                                                if((member.key === profile?.key || isAdmin) && (member.key !== profile?.key)) {
+                                                if((!isAdmin) && (member.key !== profile?.key)) {
                                                     return <ListItem 
                                                             key={member.key}
                                                             className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer"
