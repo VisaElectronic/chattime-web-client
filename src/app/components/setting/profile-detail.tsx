@@ -183,6 +183,7 @@ export default function ProfileSettings() {
 
           {/* Settings List */}
           <div className="divide-y divide-gray-700 dark:bg-gray-800 px-4 rounded-lg">
+            <ProfileField label="Email Address" value={profile?.email} />
             <ProfileField label="Username" value={profile?.username ? '@' + profile?.username : ''} />
             <ProfileField label="Phone Number" value={profile?.phone} />
             {/* <ProfileField label="Your Name Color" customElement={<div className="w-6 h-6 rounded-full bg-pink-500" />} />

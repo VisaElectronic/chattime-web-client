@@ -89,7 +89,7 @@ const AddContactModal: FC<AddContactModalProps> = ({
             </Label>
             <TextInput
               id="phoneNumber"
-              placeholder="Phone Number"
+              placeholder="Email Address"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.currentTarget.value)}
               required
