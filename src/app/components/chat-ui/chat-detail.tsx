@@ -15,11 +15,13 @@ import { toast } from 'react-toastify';
 import Loading from '@/components/commons/loading';
 import { useWindowContentStore } from '@/stores/window-content';
 import { CHAT_DETAIL_EDIT, CHAT_WINDOW } from '@/constants/window';
+import { useUserStore } from '@/stores/profile';
 
 export default function ChatDetailScreen() {
     const notify = (desc: string) => toast.success(desc);
     const setTypeWindow = useWindowContentStore(state => state.setTypeWindow);
     const selectedGroupChannel = useGroupChannelStore((state) => state.selectedGroupChannel)!;
+    const profile = useUserStore((state) => state.item);
     const [showAddMember, setShowAddMember] = useState(false);
     const [selectContextMenu, setSelectContextMenu] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -27,6 +29,8 @@ export default function ChatDetailScreen() {
     const chatPhoto = selectedGroupChannel.group ? selectedGroupChannel.photo : selectedGroupChannel?.channel.user.avatar;
 
     const [members, setMembers] = useState<ChannelMember[]>([]);
+
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         if(!selectedGroupChannel.group) return; 
@@ -89,6 +93,14 @@ export default function ChatDetailScreen() {
     const contextMenuItems: ContextMenuItem[] = [
         { label: 'Delete', labelColor: 'text-red-500', onClick: (key: string) => handleRemoveMember(key) },
     ];
+
+    useEffect(() => {
+        const iAmAdmin = members.some(m => {
+            if(m.key === profile?.key && m.role === ADMIN_ROLE_TYPE) return true;
+            return false;
+        });
+        setIsAdmin(iAmAdmin);
+    }, [members, profile?.key]);
 
     return (
         <>
@@ -153,7 +165,7 @@ export default function ChatDetailScreen() {
                                     <TabItem active title="Members" className='p-0'>
                                         <List className='p-0 divide-y divide-gray-200 dark:divide-gray-700'>
                                             {members.map((member) => {
-                                                if(member.role == ADMIN_ROLE_TYPE) {
+                                                if((member.key === profile?.key || isAdmin) && (member.key !== profile?.key)) {
                                                     return <ListItem 
                                                             key={member.key}
                                                             className="flex items-center justify-between px-4 py-1 dark:hover:bg-gray-700 cursor-pointer"
