@@ -114,7 +114,7 @@ export default function ChatDetailScreen() {
                     }
                 </header>
 
-                <div className='my-[100px]'>
+                <div className='my-5 mt-[100px]'>
                     {/* Avatar & Title */}
                     <div className="flex flex-col items-center">
                         <div className="rounded-full bg-gradient-to-br from-teal-400 to-blue-600 flex items-center justify-center text-6xl">
