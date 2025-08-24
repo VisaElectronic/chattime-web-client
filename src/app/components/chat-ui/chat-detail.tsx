@@ -95,7 +95,7 @@ export default function ChatDetailScreen() {
             {loading && <Loading />}
             <div className="min-h-screen dark:bg-gray-900 dark:text-white w-full">
                 {/* Header */}
-                <header className="flex items-center p-3 justify-between border-b-[0.01px] dark:border-b-[#656565] sticky top-0 w-full dark:bg-gray-800">
+                <header className="flex items-center p-3 justify-between border-b-[0.01px] dark:border-b-[#656565] sticky top-0 w-full bg-gray-100 dark:bg-gray-800 z-1">
                     <div
                         className='cursor-pointer'
                         onClick={() => setTypeWindow(CHAT_WINDOW)}
@@ -114,7 +114,7 @@ export default function ChatDetailScreen() {
                     }
                 </header>
 
-                <div className='my-5'>
+                <div className='my-[100px]'>
                     {/* Avatar & Title */}
                     <div className="flex flex-col items-center">
                         <div className="rounded-full bg-gradient-to-br from-teal-400 to-blue-600 flex items-center justify-center text-6xl">
